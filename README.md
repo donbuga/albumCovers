@@ -2,6 +2,10 @@
 
 Aplicación web para explorar portadas de discos usando **MusicBrainz** y **Cover Art Archive**.
 
+## URL principal
+
+- Producción: https://donbuga.github.io/albumCovers/
+
 ## Requisitos
 
 - Node.js 18+
