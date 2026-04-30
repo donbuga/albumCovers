@@ -1,0 +1,1325 @@
+{
+    "pagination": {
+        "page": 1,
+        "pages": 108,
+        "per_page": 25,
+        "items": 2686,
+        "urls": {
+            "last": "https://api.discogs.com/database/search?q=soda+stereo&type=release&per_page=25&page=108",
+            "next": "https://api.discogs.com/database/search?q=soda+stereo&type=release&per_page=25&page=2"
+        }
+    },
+    "results": [
+        {
+            "country": "Europe",
+            "year": "2013",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Reissue"
+            ],
+            "label": [
+                "Music On Vinyl",
+                "Columbia",
+                "Sony Music",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Music On Vinyl B.V.",
+                "Music On Vinyl B.V.",
+                "Record Industry"
+            ],
+            "type": "release",
+            "genre": [
+                "Rock",
+                "Latin"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock",
+                "New Wave"
+            ],
+            "id": 4890094,
+            "barcode": [
+                "8718469533442",
+                "96392 1A MOVLP 851",
+                "96392 1B MOVLP 851"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/4890094-Soda-Stereo-Soda-Stereo",
+            "catno": "MOVLP851",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/4890094",
+            "community": {
+                "want": 291,
+                "have": 1544
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "text": "180 Gram",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Reissue"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Argentina",
+            "year": "2015",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Reissue"
+            ],
+            "label": [
+                "Sony Music",
+                "Sony Music Entertainment Argentina S.A.",
+                "Sony Music Entertainment Argentina S.A.",
+                "Sony Music Entertainment Argentina S.A."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 7719751,
+            "barcode": [
+                "8 88751 03871 4",
+                "88875103871 A",
+                "88875103871 B"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/7719751-Soda-Stereo-Soda-Stereo",
+            "catno": "88875103871",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/7719751",
+            "community": {
+                "want": 138,
+                "have": 903
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "text": "180",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Reissue"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Argentina",
+            "year": "1984",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album"
+            ],
+            "label": [
+                "Discos CBS",
+                "Discos CBS",
+                "Discos CBS S.A.I.C.F.",
+                "Discos CBS S.A.I.C.F."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 1894895,
+            "barcode": [
+                "SADAIC-BIEM",
+                "ALS 7248",
+                "ALS 7249"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/1894895-Soda-Stereo-Soda-Stereo",
+            "catno": "20.526",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/1894895",
+            "community": {
+                "want": 550,
+                "have": 599
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Argentina",
+            "year": "2007",
+            "format": [
+                "CD",
+                "Album",
+                "Remastered"
+            ],
+            "label": [
+                "Columbia",
+                "Sony BMG Music Entertainment (Argentina) S.A.",
+                "Laser Disc Argentina",
+                "Sony BMG Music Entertainment",
+                "CBS Studios, Argentina"
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Pop Rock"
+            ],
+            "id": 2760422,
+            "barcode": [
+                "8 86971 40712 9",
+                "40176 - L.D.A. - INDUSTRIA ARGENTINA - SONY BMG - 7140712"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/2760422-Soda-Stereo-Soda-Stereo",
+            "catno": "8869 714071 2",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/2760422",
+            "community": {
+                "want": 92,
+                "have": 395
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "CD",
+                    "qty": "1",
+                    "descriptions": [
+                        "Album",
+                        "Remastered"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Mexico",
+            "year": "2016",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Reissue"
+            ],
+            "label": [
+                "Sony Music",
+                "Sony Music Entertainment Argentina S.A.",
+                "Sony Music Entertainment México, S.A. De C.V."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 8606408,
+            "barcode": [
+                "888751038714",
+                "133440E1/A",
+                "133440E2/B"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/8606408-Soda-Stereo-Soda-Stereo",
+            "catno": "888751038714",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/8606408",
+            "community": {
+                "want": 103,
+                "have": 295
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Reissue"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Mexico",
+            "year": "1984",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Special Edition",
+                "Stereo"
+            ],
+            "label": [
+                "Columbia",
+                "CBS/Columbia Internacional, S.A.",
+                "CBS/Columbia Internacional, S.A.",
+                "Discos CBS S.A.I.C.F."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 5169110,
+            "barcode": [
+                "03-09-18140",
+                "03-09-18141",
+                "03-09-18140-1A",
+                "03-09-18141-1A"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/5169110-Soda-Stereo-Soda-Stereo",
+            "catno": "KLS-463245",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/5169110",
+            "community": {
+                "want": 173,
+                "have": 144
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Special Edition",
+                        "Stereo"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Peru",
+            "year": "1986",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album"
+            ],
+            "label": [
+                "CBS Discos",
+                "Discos CBS S.A.I.C.F.",
+                "Discos CBS S.A.I.C.F.",
+                "CBS Discos Del Peru S.A.",
+                "CBS Discos Del Peru S.A."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock",
+                "Arena Rock",
+                "New Wave"
+            ],
+            "id": 3981305,
+            "barcode": [
+                "S.E. 8786 - A",
+                "S.E. 8786 - B",
+                "CSC-8200"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/3981305-Soda-Stereo-Soda-Stereo",
+            "catno": "S.E. 8786",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/3981305",
+            "community": {
+                "want": 119,
+                "have": 188
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Argentina",
+            "year": "2012",
+            "format": [
+                "CD",
+                "Album",
+                "Reissue",
+                "Remastered",
+                "Special Edition"
+            ],
+            "label": [
+                "Sony Music",
+                "Todo Soda",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Laser Disc Argentina"
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock",
+                "New Wave"
+            ],
+            "id": 6207268,
+            "barcode": [
+                "9 789871 656349",
+                "61076 - L.D.A. - INDUSTRIA ARGENTINA - SONY BMG - 1958712",
+                "ISBN 978-987-1656-34-9"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/6207268-Soda-Stereo-Soda-Stereo",
+            "catno": "88691958712",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/6207268",
+            "community": {
+                "want": 69,
+                "have": 168
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "CD",
+                    "qty": "1",
+                    "descriptions": [
+                        "Album",
+                        "Reissue",
+                        "Remastered",
+                        "Special Edition"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Netherlands",
+            "year": "2025",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Limited Edition",
+                "Numbered",
+                "Reissue",
+                "Remastered",
+                "Stereo"
+            ],
+            "label": [
+                "Music On Vinyl",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Music On Vinyl B.V.",
+                "Music On Vinyl B.V."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock",
+                "Latin"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock",
+                "New Wave"
+            ],
+            "id": 35814562,
+            "barcode": [
+                "8719262041783",
+                "(Runout side A, stamped): 408525 1A MOVLP851",
+                "(Runout side B, stamped): 408525 1B MOVLP851"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/35814562-Soda-Stereo-Soda-Stereo",
+            "catno": "MOVLP3977",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/35814562",
+            "community": {
+                "want": 33,
+                "have": 190
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "text": "Crystal Clear vinyl, 180g",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Limited Edition",
+                        "Numbered",
+                        "Reissue",
+                        "Remastered",
+                        "Stereo"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Colombia",
+            "year": "1986",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Stereo"
+            ],
+            "label": [
+                "CBS",
+                "Discos CBS, S.A., Colombia",
+                "Discos CBS S.A.I.C.F."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "New Wave",
+                "Pop Rock"
+            ],
+            "id": 2461277,
+            "barcode": [],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/2461277-Soda-Stereo-Soda-Stereo",
+            "catno": "141956",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/2461277",
+            "community": {
+                "want": 117,
+                "have": 85
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Stereo"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Chile",
+            "genre": [
+                "Rock",
+                "Pop"
+            ],
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Stereo"
+            ],
+            "style": [
+                "Ska"
+            ],
+            "id": 16850292,
+            "label": [
+                "Discos CBS",
+                "Sony Music",
+                "Sony Music Entertainment Chile S.A.",
+                "Sony Music Entertainment Argentina S.A.",
+                "Sony Music Entertainment Argentina S.A.",
+                "Sony Music Entertainment Chile S.A.",
+                "Sony Music Entertainment Chile S.A.",
+                "Sony Music Entertainment Chile S.A."
+            ],
+            "type": "release",
+            "barcode": [
+                "888751038714"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/16850292-Soda-Stereo-Soda-Stereo",
+            "catno": "none",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/16850292",
+            "community": {
+                "want": 45,
+                "have": 166
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Stereo"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Argentina",
+            "year": "2007",
+            "format": [
+                "CD",
+                "Album",
+                "Promo",
+                "Remastered"
+            ],
+            "label": [
+                "Columbia",
+                "Sony BMG Music Entertainment"
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 8421490,
+            "barcode": [
+                " 8 86971 40712 9"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/8421490-Soda-Stereo-Soda-Stereo",
+            "catno": "8869 714071 2",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/8421490",
+            "community": {
+                "want": 45,
+                "have": 164
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "CD",
+                    "qty": "1",
+                    "descriptions": [
+                        "Album",
+                        "Promo",
+                        "Remastered"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Spain",
+            "year": "1987",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Compilation"
+            ],
+            "label": [
+                "CBS",
+                "Discos CBS, S.A., Madrid",
+                "Discos CBS S.A.I.C.F."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock",
+                "Pop"
+            ],
+            "style": [],
+            "id": 4586652,
+            "barcode": [
+                "SGAE",
+                "M-27278-1987"
+            ],
+            "master_id": 0,
+            "master_url": null,
+            "uri": "/release/4586652-Soda-Stereo-Soda-Stereo",
+            "catno": "CBS 460254 1",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/4586652",
+            "community": {
+                "want": 131,
+                "have": 52
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Compilation"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Argentina",
+            "year": "1991",
+            "format": [
+                "CD",
+                "Album",
+                "Reissue"
+            ],
+            "label": [
+                "Columbia",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Sony Music Entertainment (Argentina) S.A."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Pop Rock"
+            ],
+            "id": 678853,
+            "barcode": [
+                "AAD",
+                "SADAIC",
+                "DIDP-076475 2"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/678853-Soda-Stereo-Soda-Stereo",
+            "catno": "CD 2-461793",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/678853",
+            "community": {
+                "want": 76,
+                "have": 115
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "CD",
+                    "qty": "1",
+                    "descriptions": [
+                        "Album",
+                        "Reissue"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Chile",
+            "year": "2015",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Reissue"
+            ],
+            "label": [
+                "Sony Music",
+                "Discos CBS"
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 10219693,
+            "barcode": [
+                "133347E1/A",
+                "133347E2/A"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/10219693-Soda-Stereo-Soda-Stereo",
+            "catno": "133347",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/10219693",
+            "community": {
+                "want": 61,
+                "have": 89
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "text": "180 gram",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Reissue"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Ecuador",
+            "year": "1986",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Compilation"
+            ],
+            "label": [
+                "CBS",
+                "Ifesa",
+                "CBS Inc.",
+                "Emporio Musical S.A.",
+                "Cromos S.A."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 5415101,
+            "barcode": [],
+            "master_id": 0,
+            "master_url": null,
+            "uri": "/release/5415101-Soda-Stereo-Soda-Stereo",
+            "catno": "331-0439",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/5415101",
+            "community": {
+                "want": 95,
+                "have": 57
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Compilation"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Argentina",
+            "year": "1996",
+            "format": [
+                "CD",
+                "Album",
+                "Remastered"
+            ],
+            "label": [
+                "Columbia",
+                "Sony Music",
+                "Remasterización Digital",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Sony Music Entertainment (Brasil) Ind. E Com. Ltda.",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "SME Brasil"
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 6053037,
+            "barcode": [
+                "1-1-119207 1 MASTERED BY SME BRAZIL",
+                "5 099746 179328 >",
+                "IFPI L391",
+                "IFPI 6603",
+                "SADAIC",
+                "ADD",
+                "AAD"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/6053037-Soda-Stereo-Soda-Stereo",
+            "catno": "CD 2-461793",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/6053037",
+            "community": {
+                "want": 52,
+                "have": 84
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "CD",
+                    "qty": "1",
+                    "descriptions": [
+                        "Album",
+                        "Remastered"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Mexico",
+            "year": "1992",
+            "format": [
+                "CD",
+                "Compilation"
+            ],
+            "label": [
+                "Columbia",
+                "Sony Music Special Marketing",
+                "Sony Music Entertainment (Argentina) S.A.",
+                "Sony Music Entertainment México, S.A. De C.V.",
+                "Sonopress (H)"
+            ],
+            "type": "release",
+            "genre": [
+                "Rock",
+                "Latin"
+            ],
+            "style": [
+                "Pop Rock",
+                "Arena Rock"
+            ],
+            "id": 3165313,
+            "barcode": [
+                "7 509947 058523",
+                "W.O. 61794-5P  CDDE470585  SONOPRESS 2 (H)",
+                "W.O. 61794-1  CDDE470585  SONOPRESS-2 (H)"
+            ],
+            "master_id": 593952,
+            "master_url": "https://api.discogs.com/masters/593952",
+            "uri": "/release/3165313-Soda-Stereo-La-Historia-De-Soda-Stereo",
+            "catno": "CDDE-470585",
+            "title": "Soda Stereo - La Historia De Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/3165313",
+            "community": {
+                "want": 12,
+                "have": 220
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "CD",
+                    "qty": "1",
+                    "descriptions": [
+                        "Compilation"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Argentina",
+            "year": "2003",
+            "format": [
+                "CD",
+                "Album"
+            ],
+            "label": [
+                "Columbia"
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Pop Rock"
+            ],
+            "id": 2969779,
+            "barcode": [
+                "5 099749 387829"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/2969779-Soda-Stereo-Soda-Stereo",
+            "catno": "2-493878",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/2969779",
+            "community": {
+                "want": 56,
+                "have": 56
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "CD",
+                    "qty": "1",
+                    "text": "Cardboard Sleeve",
+                    "descriptions": [
+                        "Album"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Colombia",
+            "genre": [
+                "Rock"
+            ],
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Reissue",
+                "Stereo"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 10865750,
+            "label": [
+                "Discos CBS",
+                "Sony Music Entertainment Argentina S.A.",
+                "Sony Music",
+                "GZ Media"
+            ],
+            "type": "release",
+            "barcode": [
+                "8 88751 03871 4",
+                "SADAIC-BIEM",
+                "133440E1/A",
+                "133440E2/A"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/10865750-Soda-Stereo-Soda-Stereo",
+            "catno": "888751038714",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/10865750",
+            "community": {
+                "want": 57,
+                "have": 51
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Reissue",
+                        "Stereo"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Argentina",
+            "year": "1984",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album",
+                "Promo"
+            ],
+            "label": [
+                "Discos CBS",
+                "Discos CBS",
+                "Discos CBS S.A.I.C.F.",
+                "Discos CBS S.A.I.C.F."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 13272644,
+            "barcode": [
+                "SADAIC-BIEM",
+                "ALS 7248",
+                "ALS 7249"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/13272644-Soda-Stereo-Soda-Stereo",
+            "catno": "20.526",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/13272644",
+            "community": {
+                "want": 82,
+                "have": 23
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album",
+                        "Promo"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Bolivia",
+            "year": "1986",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album"
+            ],
+            "label": [
+                "Discos CBS",
+                "Heriba Ltda."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Ska",
+                "Pop Rock"
+            ],
+            "id": 6912908,
+            "barcode": [],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/6912908-Soda-Stereo-Soda-Stereo",
+            "catno": "SLP-20458",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/6912908",
+            "community": {
+                "want": 85,
+                "have": 17
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Chile",
+            "year": "1985",
+            "format": [
+                "Cassette",
+                "Album"
+            ],
+            "label": [
+                "CBS"
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "New Wave",
+                "Pop Rock"
+            ],
+            "id": 3183947,
+            "barcode": [],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/3183947-Soda-Stereo-Soda-Stereo",
+            "catno": "KRBF-0565",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/3183947",
+            "community": {
+                "want": 51,
+                "have": 44
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Cassette",
+                    "qty": "1",
+                    "descriptions": [
+                        "Album"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Mexico",
+            "year": "2007",
+            "format": [
+                "CD",
+                "Album",
+                "Remastered"
+            ],
+            "label": [
+                "Columbia",
+                "Sony BMG Music Entertainment (Argentina) S.A."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Pop Rock"
+            ],
+            "id": 9038448,
+            "barcode": [
+                "8 86971 40712 9"
+            ],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/9038448-Soda-Stereo-Soda-Stereo",
+            "catno": "8869 714071 29",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/9038448",
+            "community": {
+                "want": 54,
+                "have": 45
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "CD",
+                    "qty": "1",
+                    "descriptions": [
+                        "Album",
+                        "Remastered"
+                    ]
+                }
+            ]
+        },
+        {
+            "country": "Colombia",
+            "year": "1986",
+            "format": [
+                "Vinyl",
+                "LP",
+                "Album"
+            ],
+            "label": [
+                "Columbia",
+                "Discos CBS, S.A., Colombia",
+                "Discos CBS S.A.I.C.F."
+            ],
+            "type": "release",
+            "genre": [
+                "Rock"
+            ],
+            "style": [
+                "Pop Rock",
+                "New Wave"
+            ],
+            "id": 14547290,
+            "barcode": [],
+            "master_id": 188903,
+            "master_url": "https://api.discogs.com/masters/188903",
+            "uri": "/release/14547290-Soda-Stereo-Soda-Stereo",
+            "catno": "141956",
+            "title": "Soda Stereo - Soda Stereo",
+            "thumb": "",
+            "cover_image": "",
+            "resource_url": "https://api.discogs.com/releases/14547290",
+            "community": {
+                "want": 58,
+                "have": 37
+            },
+            "format_quantity": 1,
+            "formats": [
+                {
+                    "name": "Vinyl",
+                    "qty": "1",
+                    "descriptions": [
+                        "LP",
+                        "Album"
+                    ]
+                }
+            ]
+        }
+    ]
+}

@@ -6,6 +6,7 @@ import type {
 import { getCoverArtUrl } from './coverArtService';
 
 const MUSICBRAINZ_BASE_URL = 'https://musicbrainz.org/ws/2/release/';
+const CORS_PROXY_URL = 'https://api.allorigins.win/raw?url=';
 export const MUSICBRAINZ_APP_NAME = 'AlbumCoversExplorer/1.0.0';
 
 const buildArtistName = (release: MusicBrainzRelease): string => {
@@ -43,15 +44,21 @@ export const searchReleases = async (searchTerm: string): Promise<AlbumResult[]>
     return [];
   }
 
+  // Use absolute URL for URL constructor, but fetch through proxy
   const url = new URL(MUSICBRAINZ_BASE_URL);
   url.searchParams.set('query', trimmedQuery);
   url.searchParams.set('fmt', 'json');
 
-  const response = await fetch(url.toString(), {
+  // Use CORS proxy to bypass network issues
+  const musicBrainzUrl = MUSICBRAINZ_BASE_URL + url.search.substring(1);
+  const corsProxyUrl = CORS_PROXY_URL + encodeURIComponent(musicBrainzUrl);
+
+  const response = await fetch(corsProxyUrl, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
       'X-Client-Name': MUSICBRAINZ_APP_NAME,
+      'User-Agent': MUSICBRAINZ_APP_NAME,
     },
   });
 
