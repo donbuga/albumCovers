@@ -54,3 +54,4 @@ npm run preview
 - `src/services/coverArtService.ts`: genera URL de portadas por release ID.
 - `src/components/*`: componentes de UI.
 - `src/types/musicBrainz.ts`: tipos TypeScript de API y modelo normalizado.
+# Trigger workflow
