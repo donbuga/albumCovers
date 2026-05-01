@@ -5,7 +5,7 @@ import { searchReleases as searchDiscogs } from './discogsService';
 const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 // Get only the first image for initial load
-export const getInitialImage = async (releaseId: string, apiSource: 'itunes' | 'discogs', coverUrl?: string, albumTitle?: string, artist?: string): Promise<{image: string, totalImages: number, releaseId?: string}> => {
+export const getInitialImage = async (releaseId: string, apiSource: 'itunes' | 'discogs', coverUrl?: string): Promise<{image: string, totalImages: number, releaseId?: string}> => {
   if (apiSource === 'itunes') {
     // For iTunes, start with the large cover image
     if (!coverUrl) {
