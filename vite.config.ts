@@ -4,6 +4,14 @@ import react from '@vitejs/plugin-react';
 export default defineConfig({
   base: '/albumCovers/',
   plugins: [react()],
+  build: {
+    target: 'es2015',
+    rollupOptions: {
+      output: {
+        manualChunks: undefined,
+      },
+    },
+  },
   server: {
     proxy: {
       '/api/musicbrainz': {
