@@ -25,7 +25,7 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
       try {
         setIsLoading(true);
         console.log('Loading initial image for:', { albumTitle, artist, apiSource });
-        const result = await getInitialImage(releaseId, apiSource, coverUrl, albumTitle, artist);
+        const result = await getInitialImage(releaseId, apiSource, coverUrl);
         console.log('Initial image loaded:', result);
         setImages([result.image]);
         setCurrentImageIndex(0);
