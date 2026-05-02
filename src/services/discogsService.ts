@@ -3,6 +3,41 @@ import type { DiscogsRelease, DiscogsSearchResponse } from '../types/discogs';
 
 const DISCOGS_BASE_URL = 'https://api.discogs.com';
 const DISCOGS_USER_AGENT = 'AlbumCoversExplorer/1.0.0';
+const RELEASES_ENDPOINT_INTERVAL_MS = 4000;
+
+let releasesRequestQueue = Promise.resolve();
+let lastReleasesRequestAt = 0;
+
+const wait = (ms: number): Promise<void> =>
+  new Promise((resolve) => {
+    setTimeout(resolve, ms);
+  });
+
+const fetchDiscogsReleaseWithInterval = async (url: string): Promise<Response> => {
+  const runRequest = async (): Promise<Response> => {
+    const now = Date.now();
+    const elapsed = now - lastReleasesRequestAt;
+
+    if (elapsed < RELEASES_ENDPOINT_INTERVAL_MS) {
+      await wait(RELEASES_ENDPOINT_INTERVAL_MS - elapsed);
+    }
+
+    const response = await fetch(url, {
+      method: 'GET',
+      headers: {
+        'User-Agent': DISCOGS_USER_AGENT,
+      },
+    });
+
+    lastReleasesRequestAt = Date.now();
+    return response;
+  };
+
+  const nextRequest = releasesRequestQueue.then(runRequest, runRequest);
+  releasesRequestQueue = nextRequest.then(() => undefined, () => undefined);
+
+  return nextRequest;
+};
 
 const normalizeDiscogsRelease = async (release: DiscogsRelease): Promise<AlbumResult> => {
   // Extract artist from title (format: "Artist - Title")
@@ -14,11 +49,7 @@ const normalizeDiscogsRelease = async (release: DiscogsRelease): Promise<AlbumRe
   let coverUrl = 'https://via.placeholder.com/300x300/333/fff?text=No+Cover';
   
   try {
-    const response = await fetch(release.resource_url, {
-      headers: {
-        'User-Agent': DISCOGS_USER_AGENT,
-      },
-    });
+    const response = await fetchDiscogsReleaseWithInterval(release.resource_url);
 
     if (response.ok) {
       const releaseDetail = await response.json();
@@ -88,12 +119,7 @@ export const getReleaseImages = async (releaseId: string): Promise<string[]> => 
   try {
     const url = `${DISCOGS_BASE_URL}/releases/${releaseId}`;
 
-    const response = await fetch(url, {
-      method: 'GET',
-      headers: {
-        'User-Agent': DISCOGS_USER_AGENT,
-      },
-    });
+    const response = await fetchDiscogsReleaseWithInterval(url);
 
     if (!response.ok) {
       throw new Error(`Discogs API respondió con estado ${response.status}`);
