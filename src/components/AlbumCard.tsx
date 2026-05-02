@@ -11,119 +11,69 @@ const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
   const [imageError, setImageError] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
-  // Load voices when component mounts
   useEffect(() => {
     if ('speechSynthesis' in window) {
       speechSynthesis.getVoices();
     }
   }, []);
 
-  const handleImageClick = () => {
-    setShowModal(true);
-  };
-
   const handlePlayAlbum = (title: string, artist: string) => {
-    // Check if browser supports speech synthesis
     if ('speechSynthesis' in window) {
-      const utterance = new SpeechSynthesisUtterance(
-        `Okey Google, reproduce el álbum ${title} del artista ${artist}`
-      );
+      const utterance = new SpeechSynthesisUtterance(`Okey Google, reproduce el álbum ${title} del artista ${artist}`);
       utterance.lang = 'es-ES';
       utterance.rate = 0.9;
-      
-      // Set female voice if available
-      const voices = speechSynthesis.getVoices();
-      const femaleVoice = voices.find(voice => 
-        voice.lang.includes('es') && 
-        (voice.name.includes('female') || 
-         voice.name.includes('woman') || 
-         voice.name.includes('mujer') ||
-         voice.name.includes('Monica') ||
-         voice.name.includes('Sophie') ||
-         voice.name.includes('Lucia'))
-      );
-      
-      if (femaleVoice) {
-        utterance.voice = femaleVoice;
-      }
-      
       speechSynthesis.speak(utterance);
-    } else {
-      // Fallback: copy to clipboard
-      const command = `Okey Google, reproduce el álbum ${title} del artista ${artist}`;
-      navigator.clipboard.writeText(command).then(() => {
-        alert('Comando copiado al portapapeles: ' + command);
-      }).catch(() => {
-        alert('Comando: ' + command);
-      });
     }
   };
 
   return (
     <>
-      <article className="album-card">
-        <div 
-          className="cover-wrapper"
-          onClick={handleImageClick}
-          style={{ cursor: 'pointer' }}
-        >
+      <article className="overflow-hidden rounded-xl border border-[#22314f] bg-[#0b1327]/90 shadow-xl shadow-black/20">
+        <div className="aspect-square w-full cursor-pointer bg-slate-800" onClick={() => setShowModal(true)}>
           {!imageError ? (
             <img
               src={album.coverUrl}
               alt={`Portada de ${album.title} por ${album.artist}`}
               loading="lazy"
               onError={() => setImageError(true)}
+              className="h-full w-full object-cover"
             />
           ) : (
-            <div className="cover-placeholder">Sin portada</div>
+            <div className="grid h-full w-full place-items-center font-semibold text-slate-300">Sin portada</div>
           )}
         </div>
 
-      <div className="album-info">
-        <h2>{album.title}</h2>
-        <p>
-          <strong>Artista:</strong> {album.artist}
-        </p>
-        {album.year && (
-          <p>
-            <strong>Año:</strong> {album.year}
-          </p>
-        )}
-        {album.country && (
-          <p>
-            <strong>País:</strong> {album.country}
-          </p>
-        )}
-        {album.status && (
-          <p>
-            <strong>Estado:</strong> {album.status}
-          </p>
-        )}
-        <div className="play-button-wrapper">
-          <button
-            className="play-button"
-            onClick={() => handlePlayAlbum(album.title, album.artist)}
-            title="Reproducir álbum con voz"
-            aria-label={`Reproducir ${album.title} de ${album.artist}`}
-          >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <polygon points="5 3 19 12 5 21 5 3"></polygon>
-            </svg>
-          </button>
+        <div className="space-y-1 p-4 text-sm text-slate-300">
+          <h2 className="line-clamp-2 text-base font-bold text-slate-100">{album.title}</h2>
+          <p><strong>Artista:</strong> {album.artist}</p>
+          {album.year && <p><strong>Año:</strong> {album.year}</p>}
+          {album.country && <p><strong>País:</strong> {album.country}</p>}
+          {album.status && <p><strong>Estado:</strong> {album.status}</p>}
+          <div className="flex justify-end pt-2">
+            <button
+              className="rounded-md bg-slate-800 p-2 text-slate-300 transition hover:bg-slate-700 hover:text-white"
+              onClick={() => handlePlayAlbum(album.title, album.artist)}
+              title="Reproducir álbum con voz"
+              aria-label={`Reproducir ${album.title} de ${album.artist}`}
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+              </svg>
+            </button>
+          </div>
         </div>
-      </div>
-    </article>
-    {showModal && (
-      <ImageModal 
-        releaseId={album.id} 
-        apiSource={apiSource} 
-        coverUrl={album.coverUrl}
-        albumTitle={album.title}
-        artist={album.artist}
-        onClose={() => setShowModal(false)} 
-      />
-    )}
-  </>
+      </article>
+      {showModal && (
+        <ImageModal
+          releaseId={album.id}
+          apiSource={apiSource}
+          coverUrl={album.coverUrl}
+          albumTitle={album.title}
+          artist={album.artist}
+          onClose={() => setShowModal(false)}
+        />
+      )}
+    </>
   );
 };
 
