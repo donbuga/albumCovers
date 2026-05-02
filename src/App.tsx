@@ -49,11 +49,11 @@ const App = () => {
     <main className="app-container">
       <header>
         <h1>Album Covers Explorer</h1>
-        <p>Encuentra lanzamientos y sus portadas usando iTunes o Discogs API.</p>
+        <p>Encuentra portadas de discos usando iTunes o Discogs API.</p>
       </header>
 
       <div style={{ marginBottom: '20px' }}>
-        <label htmlFor="api-selector" style={{ color: 'white', marginRight: '10px' }}>
+        <label htmlFor="api-selector" style={{ marginRight: '10px' }}>
           Fuente de búsqueda:
         </label>
         <select
