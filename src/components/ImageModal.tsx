@@ -67,11 +67,36 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
     try {
       setIsLoadingMore(true);
       console.log('Loading all images for:', { albumTitle, artist, apiSource });
-      const imageUrls = await getAllImages(releaseId, apiSource, coverUrl, albumTitle, artist);
+      const imageUrls = await getAllImages(
+        releaseId,
+        apiSource,
+        coverUrl,
+        albumTitle,
+        artist,
+        (partialImages) => {
+          setImages((currentImages) => {
+            const mergedImages = [...currentImages];
+            for (const image of partialImages) {
+              if (!mergedImages.includes(image)) {
+                mergedImages.push(image);
+              }
+            }
+            return mergedImages;
+          });
+        },
+      );
       console.log('All images loaded:', imageUrls.length, imageUrls);
       
       if (imageUrls.length > 0) {
-        setImages(imageUrls);
+        setImages((currentImages) => {
+          const mergedImages = [...currentImages];
+          for (const image of imageUrls) {
+            if (!mergedImages.includes(image)) {
+              mergedImages.push(image);
+            }
+          }
+          return mergedImages;
+        });
         setHasLoadedAll(true);
         setError(null);
       } else {

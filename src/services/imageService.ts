@@ -35,7 +35,14 @@ const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
 const MAX_IMAGES = 10; // Maximum number of images to show
 
 // Get all images (for lazy loading)
-export const getAllImages = async (releaseId: string, apiSource: 'itunes' | 'discogs', coverUrl?: string, albumTitle?: string, artist?: string): Promise<string[]> => {
+export const getAllImages = async (
+  releaseId: string,
+  apiSource: 'itunes' | 'discogs',
+  coverUrl?: string,
+  albumTitle?: string,
+  artist?: string,
+  onPartialImages?: (images: string[]) => void,
+): Promise<string[]> => {
   if (apiSource === 'itunes') {
     // When using iTunes for search, we'll try to find the same album in Discogs for more images
     const cacheKey = `${artist} ${albumTitle}`;
@@ -44,13 +51,19 @@ export const getAllImages = async (releaseId: string, apiSource: 'itunes' | 'dis
     const cached = discogsCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_DURATION) {
       console.log('Using cached Discogs results for:', cacheKey);
+      onPartialImages?.(cached.images);
       return cached.images;
     }
     
     // Fallback: use iTunes image if Discogs search fails
     if (!coverUrl) {
-      return ['https://via.placeholder.com/600x600/333/fff?text=No+Cover'];
+      const fallback = ['https://via.placeholder.com/600x600/333/fff?text=No+Cover'];
+      onPartialImages?.(fallback);
+      return fallback;
     }
+
+    const iTunesImage = coverUrl.replace(/\d+x\d+bb\.jpg/, '1000x1000bb.jpg');
+    onPartialImages?.([iTunesImage]);
     
     // Search for album in Discogs using title and artist
     const searchTerm = `${artist} ${albumTitle}`;
@@ -63,8 +76,7 @@ export const getAllImages = async (releaseId: string, apiSource: 'itunes' | 'dis
       console.warn('Discogs search failed, using fallback:', searchError);
       
       // Use iTunes fallback for any Discogs error
-      const largeImageUrl = coverUrl.replace(/\d+x\d+bb\.jpg/, '1000x1000bb.jpg');
-      return [largeImageUrl];
+      return [iTunesImage];
     }
     
     console.log('Discogs results found:', discogsResults?.length || 0);
@@ -92,9 +104,6 @@ export const getAllImages = async (releaseId: string, apiSource: 'itunes' | 'dis
       console.log('Images found for release:', discogsImages.length);
       
       if (discogsImages.length > 0) {
-        // Create iTunes large image URL
-        const iTunesImage = coverUrl.replace(/\d+x\d+bb\.jpg/, '1000x1000bb.jpg');
-        
         // Combine iTunes image (first) with Discogs images (avoiding duplicates)
         const allImages = [iTunesImage];
         
@@ -102,6 +111,7 @@ export const getAllImages = async (releaseId: string, apiSource: 'itunes' | 'dis
         for (const discogsImage of discogsImages) {
           if (discogsImage !== iTunesImage && allImages.length < MAX_IMAGES) {
             allImages.push(discogsImage);
+            onPartialImages?.([...allImages]);
           }
         }
         
@@ -116,13 +126,20 @@ export const getAllImages = async (releaseId: string, apiSource: 'itunes' | 'dis
     
     // No Discogs results found, return just iTunes image
     console.warn('No Discogs results found, returning iTunes image only');
-    const largeImageUrl = coverUrl.replace(/\d+x\d+bb\.jpg/, '1000x1000bb.jpg');
-    return [largeImageUrl];
+    return [iTunesImage];
   } else {
     // For Discogs, use the existing function
     const images = await getReleaseImages(releaseId);
     // Limit to maximum MAX_IMAGES images
-    return images.slice(0, MAX_IMAGES);
+    const limitedImages = images.slice(0, MAX_IMAGES);
+    if (limitedImages.length > 0) {
+      const progressiveImages: string[] = [];
+      for (const image of limitedImages) {
+        progressiveImages.push(image);
+        onPartialImages?.([...progressiveImages]);
+      }
+    }
+    return limitedImages;
   }
 };
 
