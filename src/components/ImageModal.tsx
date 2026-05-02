@@ -11,7 +11,8 @@ interface ImageModalProps {
 }
 
 const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClose }: ImageModalProps) => {
-  const [images, setImages] = useState<string[]>([]);
+  const initialPreview = coverUrl ? coverUrl.replace(/\d+x\d+bb\.jpg/, '1000x1000bb.jpg') : undefined;
+  const [images, setImages] = useState<string[]>(initialPreview ? [initialPreview] : []);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -24,10 +25,20 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
     const loadInitialImage = async () => {
       try {
         setIsLoading(true);
+        if (initialPreview) {
+          setImages([initialPreview]);
+          setCurrentImageIndex(0);
+        }
         console.log('Loading initial image for:', { albumTitle, artist, apiSource });
         const result = await getInitialImage(releaseId, apiSource, coverUrl);
         console.log('Initial image loaded:', result);
-        setImages([result.image]);
+        setImages((currentImages) => {
+          if (currentImages[0] === result.image) {
+            return currentImages;
+          }
+
+          return [result.image, ...currentImages.filter((image) => image !== result.image)];
+        });
         setCurrentImageIndex(0);
         setError(null);
         
@@ -48,7 +59,7 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
     };
 
     loadInitialImage();
-  }, [releaseId, apiSource, coverUrl, albumTitle, artist]);
+  }, [releaseId, apiSource, coverUrl, albumTitle, artist, initialPreview]);
 
   const loadAllImages = async () => {
     if (hasLoadedAll || isLoadingMore) return;
@@ -176,19 +187,19 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
           position: 'relative',
         }}
       >
-        {isLoading ? (
-          <div style={{ textAlign: 'center', padding: '60px 40px' }}>
+        {isLoading && images.length === 0 ? (
+          <div style={{ textAlign: 'center', padding: '24px 20px' }}>
             <div style={{ 
               display: 'inline-block',
-              width: '40px',
-              height: '40px',
-              border: '4px solid #f3f3f3',
-              borderTop: '4px solid #2563eb',
+              width: '24px',
+              height: '24px',
+              border: '3px solid #f3f3f3',
+              borderTop: '3px solid #2563eb',
               borderRadius: '50%',
               animation: 'spin 1s linear infinite',
-              marginBottom: '20px'
+              marginBottom: '8px'
             }}></div>
-            <div style={{ fontSize: '18px', color: '#666' }}>Cargando imagen inicial...</div>
+            <div style={{ fontSize: '13px', color: '#d1d5db' }}>Cargando imagen...</div>
           </div>
         ) : error ? (
           <div style={{ textAlign: 'center', padding: '40px', color: 'red' }}>
@@ -232,32 +243,32 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
         ) : (
           <div style={{ display: 'flex', flexDirection: 'column', gap: '20px', position: 'relative' }}>
             {/* Loading overlay for additional images */}
-            {isLoadingMore && (
+            {(isLoadingMore || (isLoading && images.length > 0)) && (
               <div style={{
                 position: 'absolute',
-                top: 0,
-                left: 0,
-                right: 0,
-                bottom: 0,
-                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                top: '16px',
+                right: '16px',
+                backgroundColor: 'rgba(17, 24, 39, 0.7)',
                 display: 'flex',
-                flexDirection: 'column',
                 alignItems: 'center',
                 justifyContent: 'center',
                 zIndex: 10,
-                borderRadius: '12px'
+                gap: '8px',
+                borderRadius: '9999px',
+                padding: '6px 10px',
               }}>
                 <div style={{ 
                   display: 'inline-block',
-                  width: '30px',
-                  height: '30px',
-                  border: '3px solid #f3f3f3',
-                  borderTop: '3px solid #2563eb',
+                  width: '14px',
+                  height: '14px',
+                  border: '2px solid rgba(255, 255, 255, 0.5)',
+                  borderTop: '2px solid #93c5fd',
                   borderRadius: '50%',
                   animation: 'spin 1s linear infinite',
-                  marginBottom: '10px'
                 }}></div>
-                <div style={{ fontSize: '14px', color: '#666' }}>Buscando más imágenes...</div>
+                <div style={{ fontSize: '11px', color: '#e5e7eb' }}>
+                  {isLoadingMore ? 'Buscando más imágenes...' : 'Preparando imagen...'}
+                </div>
               </div>
             )}
             
