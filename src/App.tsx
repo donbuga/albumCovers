@@ -15,7 +15,7 @@ const App = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
-  const [apiSource, setApiSource] = useState<ApiSource>('itunes');
+  const [apiSource] = useState<ApiSource>('itunes');
 
   const handleSearch = async (term: string) => {
     setHasSearched(true);
