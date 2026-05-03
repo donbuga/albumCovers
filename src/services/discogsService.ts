@@ -115,6 +115,30 @@ export const searchReleases = async (searchTerm: string): Promise<AlbumResult[]>
   }
 };
 
+export const searchReleaseIds = async (searchTerm: string): Promise<string[]> => {
+  const trimmedQuery = searchTerm.trim();
+
+  if (!trimmedQuery) {
+    return [];
+  }
+
+  const url = `${DISCOGS_BASE_URL}/database/search?q=${encodeURIComponent(trimmedQuery)}&type=release&per_page=5`;
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      'User-Agent': DISCOGS_USER_AGENT,
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error(`Discogs respondió con estado ${response.status}`);
+  }
+
+  const data = (await response.json()) as DiscogsSearchResponse;
+  return (data.results ?? []).map((release) => release.id.toString());
+};
+
 export const getReleaseImages = async (releaseId: string): Promise<string[]> => {
   try {
     const url = `${DISCOGS_BASE_URL}/releases/${releaseId}`;

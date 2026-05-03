@@ -1,8 +1,5 @@
 import { getReleaseImages } from './discogsService';
-import { searchReleases as searchDiscogs } from './discogsService';
-
-// Helper function to add delay
-const delay = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
+import { searchReleaseIds } from './discogsService';
 
 // Get only the first image for initial load
 export const getInitialImage = async (releaseId: string, apiSource: 'itunes' | 'discogs', coverUrl?: string): Promise<{image: string, totalImages: number, releaseId?: string}> => {
@@ -69,9 +66,9 @@ export const getAllImages = async (
     const searchTerm = `${artist} ${albumTitle}`;
     console.log('Searching Discogs for:', searchTerm);
     
-    let discogsResults;
+    let discogsReleaseIds: string[];
     try {
-      discogsResults = await searchDiscogs(searchTerm);
+      discogsReleaseIds = await searchReleaseIds(searchTerm);
     } catch (searchError) {
       console.warn('Discogs search failed, using fallback:', searchError);
       
@@ -79,20 +76,17 @@ export const getAllImages = async (
       return [iTunesImage];
     }
     
-    console.log('Discogs results found:', discogsResults?.length || 0);
-    
-    // Add delay between Discogs calls
-    await delay(2000);
+    console.log('Discogs release ids found:', discogsReleaseIds?.length || 0);
     
     // Find the best match (first result is usually the most relevant)
-    if (discogsResults && discogsResults.length > 0) {
-      const bestMatch = discogsResults[0];
-      console.log('Best match:', bestMatch.title, 'ID:', bestMatch.id);
+    if (discogsReleaseIds && discogsReleaseIds.length > 0) {
+      const bestMatchId = discogsReleaseIds[0];
+      console.log('Best match ID:', bestMatchId);
       
       // Get all images from Discogs for this release
       let discogsImages;
       try {
-        discogsImages = await getReleaseImages(bestMatch.id);
+        discogsImages = await getReleaseImages(bestMatchId);
       } catch (imageError) {
         console.warn('Failed to get images for release, using iTunes fallback:', imageError);
         

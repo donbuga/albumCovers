@@ -114,34 +114,35 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
     }
   };
 
-  const goToPreviousImage = async () => {
-    // Load all images if not loaded yet and trying to navigate
+  const ensureBackgroundLoading = () => {
     if (!hasLoadedAll && !isLoadingMore) {
-      await loadAllImages();
+      void loadAllImages();
     }
+  };
+
+  const goToPreviousImage = () => {
+    ensureBackgroundLoading();
     setCurrentImageIndex((prev) => (prev === 0 ? images.length - 1 : prev - 1));
   };
 
-  const goToNextImage = async () => {
-    // Load all images if not loaded yet and trying to navigate
-    if (!hasLoadedAll && !isLoadingMore) {
-      await loadAllImages();
-    }
-    setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
+  const goToNextImage = () => {
+    ensureBackgroundLoading();
+    setCurrentImageIndex((prev) => {
+      if (images.length === 0) return 0;
+      if (prev < images.length - 1) return prev + 1;
+      return prev;
+    });
   };
 
-  const goToImage = async (index: number) => {
-    // Load all images if not loaded yet and trying to navigate
-    if (!hasLoadedAll && !isLoadingMore) {
-      await loadAllImages();
-    }
+  const goToImage = (index: number) => {
+    ensureBackgroundLoading();
     setCurrentImageIndex(index);
   };
 
   // Slideshow control functions
   const startSlideshow = async () => {
     if (!hasLoadedAll && !isLoadingMore) {
-      await loadAllImages();
+      void loadAllImages();
     }
     
     if (images.length > 1) {
@@ -311,7 +312,7 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
               {(images.length > 1 || apiSource === 'itunes') && !isPlaying && (
                 <button
                   onClick={goToPreviousImage}
-                  disabled={isLoadingMore}
+                  disabled={images.length <= 1}
                   style={{
                     position: 'absolute',
                     left: '20px',
@@ -323,12 +324,12 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
                     borderRadius: '50%',
                     width: '50px',
                     height: '50px',
-                    cursor: isLoadingMore ? 'not-allowed' : 'pointer',
+                    cursor: images.length <= 1 ? 'not-allowed' : 'pointer',
                     fontSize: '24px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    opacity: isLoadingMore ? 0.5 : 1,
+                    opacity: images.length <= 1 ? 0.5 : 1,
                     zIndex: 10,
                   }}
                 >
@@ -351,7 +352,7 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
               {(images.length > 1 || apiSource === 'itunes') && !isPlaying && (
                 <button
                   onClick={goToNextImage}
-                  disabled={isLoadingMore}
+                  disabled={hasLoadedAll && currentImageIndex >= images.length - 1}
                   style={{
                     position: 'absolute',
                     right: '20px',
@@ -363,12 +364,12 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
                     borderRadius: '50%',
                     width: '50px',
                     height: '50px',
-                    cursor: isLoadingMore ? 'not-allowed' : 'pointer',
+                    cursor: hasLoadedAll && currentImageIndex >= images.length - 1 ? 'not-allowed' : 'pointer',
                     fontSize: '24px',
                     display: 'flex',
                     alignItems: 'center',
                     justifyContent: 'center',
-                    opacity: isLoadingMore ? 0.5 : 1,
+                    opacity: hasLoadedAll && currentImageIndex >= images.length - 1 ? 0.5 : 1,
                     zIndex: 10,
                   }}
                 >
