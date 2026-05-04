@@ -61,6 +61,12 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
     loadInitialImage();
   }, [releaseId, apiSource, coverUrl, albumTitle, artist, initialPreview]);
 
+  useEffect(() => {
+    if (!isLoading && !hasLoadedAll && !isLoadingMore) {
+      void loadAllImages();
+    }
+  }, [isLoading, hasLoadedAll, isLoadingMore]);
+
   const loadAllImages = async () => {
     if (hasLoadedAll || isLoadingMore) return;
     
