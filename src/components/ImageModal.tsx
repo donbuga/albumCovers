@@ -41,12 +41,8 @@ const ImageModal = ({ releaseId, apiSource, coverUrl, albumTitle, artist, onClos
         setCurrentImageIndex(0);
         setError(null);
 
-        // If we know there are more images, show the navigation
-        if (apiSource === 'itunes') {
-          setHasLoadedAll(false);
-        } else {
-          setHasLoadedAll(true);
-        }
+        // Siempre intentamos cargar más imágenes al abrir el modal
+        setHasLoadedAll(false);
       } catch (err) {
         setError('Error al cargar la imagen inicial');
         console.error('Error loading initial image:', err);
