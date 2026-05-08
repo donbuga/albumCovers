@@ -1,6 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { useDiscogsReleaseCoverEnrichment } from './useDiscogsReleaseCoverEnrichment';
+import { mapDiscogsReleaseToAlbumMetadata } from '../services/discogsReleaseMapper';
 import { searchDiscoverAlbums } from '../services/discogsService';
+import type { AlbumMetadataState } from '../types/discogs';
 import type { DiscoverAlbumFilters } from '../types/discoverAlbums';
 import type { AlbumResult } from '../types/musicBrainz';
 
@@ -15,6 +17,7 @@ const isAbortError = (error: unknown): boolean => error instanceof DOMException 
 
 export const useDiscoverAlbums = () => {
   const [albums, setAlbums] = useState<AlbumResult[]>([]);
+  const [metadataByAlbumId, setMetadataByAlbumId] = useState<Record<string, AlbumMetadataState>>({});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [hasSearched, setHasSearched] = useState(false);
@@ -38,21 +41,59 @@ export const useDiscoverAlbums = () => {
     setHasSearched(true);
     setIsLoading(true);
     setError(null);
+    setMetadataByAlbumId({});
 
     try {
       const results = await searchDiscoverAlbums(filters, abortController.signal);
       setAlbums(results);
-      enrichAlbumCovers(results, (albumId, coverUrl) => {
-        setAlbums((currentAlbums) =>
-          currentAlbums.map((album) => (album.id === albumId ? { ...album, coverUrl } : album)),
-        );
-      });
+      setMetadataByAlbumId(
+        results.reduce<Record<string, AlbumMetadataState>>((metadataStates, album) => {
+          metadataStates[album.id] = { status: 'loading' };
+          return metadataStates;
+        }, {}),
+      );
+      enrichAlbumCovers(
+        results,
+        (albumId, release, coverUrl) => {
+          const metadata = mapDiscogsReleaseToAlbumMetadata(release);
+
+          setAlbums((currentAlbums) =>
+            currentAlbums.map((album) => (album.id === albumId && coverUrl ? { ...album, coverUrl } : album)),
+          );
+          setMetadataByAlbumId((currentMetadata) => ({
+            ...currentMetadata,
+            [albumId]: {
+              status: 'success',
+              release,
+              metadata,
+              coverUrl: coverUrl ?? undefined,
+            },
+          }));
+        },
+        (albumId) => {
+          setMetadataByAlbumId((currentMetadata) => ({
+            ...currentMetadata,
+            [albumId]: currentMetadata[albumId]?.status === 'success' ? currentMetadata[albumId] : { status: 'loading' },
+          }));
+        },
+        (albumId, errorMessage) => {
+          setMetadataByAlbumId((currentMetadata) => ({
+            ...currentMetadata,
+            [albumId]: {
+              ...currentMetadata[albumId],
+              status: 'error',
+              error: errorMessage,
+            },
+          }));
+        },
+      );
     } catch (searchError) {
       if (isAbortError(searchError)) {
         return;
       }
 
       setAlbums([]);
+      setMetadataByAlbumId({});
       setError(
         searchError instanceof Error
           ? searchError.message
@@ -73,6 +114,7 @@ export const useDiscoverAlbums = () => {
     abortControllerRef.current = null;
     activeSearchKeyRef.current = null;
     setAlbums([]);
+    setMetadataByAlbumId({});
     setIsLoading(false);
     setError(null);
     setHasSearched(false);
@@ -88,6 +130,7 @@ export const useDiscoverAlbums = () => {
 
   return {
     albums,
+    metadataByAlbumId,
     error,
     hasSearched,
     isLoading,
