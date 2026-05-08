@@ -38,15 +38,9 @@ export interface DiscogsReleaseDetail {
   country: string;
   year: string;
   released: string;
-  images: Array<{
-    type: string;
-    uri: string;
-    resource_url: string;
-    uri150: string;
-    width: number;
-    height: number;
-  }>;
-  thumb: string;
+  images?: DiscogsImage[];
+  thumb?: string;
+  cover_image?: string;
 }
 
 export interface DiscogsSearchResponse {

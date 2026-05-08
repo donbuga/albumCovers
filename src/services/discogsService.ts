@@ -1,11 +1,11 @@
 import type { AlbumResult } from '../types/musicBrainz';
-import type { DiscogsRelease, DiscogsSearchResponse } from '../types/discogs';
+import type { DiscogsRelease, DiscogsReleaseDetail, DiscogsSearchResponse } from '../types/discogs';
 import type { DiscoverAlbumFilters, YearRange } from '../types/discoverAlbums';
 import type { GenreOption } from '../types/discover';
 
 const DISCOGS_BASE_URL = 'https://api.discogs.com';
 const DISCOGS_USER_AGENT = 'AlbumCoversExplorer/1.0.0';
-const RELEASES_ENDPOINT_INTERVAL_MS = 4000;
+const RELEASES_ENDPOINT_INTERVAL_MS = 3000;
 const DISCOVER_RESULTS_LIMIT = 36;
 
 const DISCOGS_GENRE_PARAMS: Partial<Record<GenreOption, 'genre' | 'style'>> = {
@@ -24,28 +24,45 @@ const DISCOGS_GENRE_PARAMS: Partial<Record<GenreOption, 'genre' | 'style'>> = {
 let releasesRequestQueue = Promise.resolve();
 let lastReleasesRequestAt = 0;
 
-const wait = (ms: number): Promise<void> =>
-  new Promise((resolve) => {
-    setTimeout(resolve, ms);
+const wait = (ms: number, signal?: AbortSignal): Promise<void> =>
+  new Promise((resolve, reject) => {
+    if (signal?.aborted) {
+      reject(new DOMException('Request aborted', 'AbortError'));
+      return;
+    }
+
+    const timeoutId = setTimeout(resolve, ms);
+
+    signal?.addEventListener(
+      'abort',
+      () => {
+        clearTimeout(timeoutId);
+        reject(new DOMException('Request aborted', 'AbortError'));
+      },
+      { once: true },
+    );
   });
 
-const fetchDiscogsReleaseWithInterval = async (url: string): Promise<Response> => {
+const fetchDiscogsReleaseWithInterval = async (url: string, signal?: AbortSignal): Promise<Response> => {
   const runRequest = async (): Promise<Response> => {
     const now = Date.now();
     const elapsed = now - lastReleasesRequestAt;
 
     if (elapsed < RELEASES_ENDPOINT_INTERVAL_MS) {
-      await wait(RELEASES_ENDPOINT_INTERVAL_MS - elapsed);
+      await wait(RELEASES_ENDPOINT_INTERVAL_MS - elapsed, signal);
     }
+
+    lastReleasesRequestAt = Date.now();
 
     const response = await fetch(url, {
       method: 'GET',
       headers: {
+        Accept: 'application/json',
         'User-Agent': DISCOGS_USER_AGENT,
       },
+      signal,
     });
 
-    lastReleasesRequestAt = Date.now();
     return response;
   };
 
@@ -55,27 +72,42 @@ const fetchDiscogsReleaseWithInterval = async (url: string): Promise<Response> =
   return nextRequest;
 };
 
+const getFirstReleaseImageUrl = (release: DiscogsReleaseDetail): string | null => {
+  const firstImage = release.images?.[0];
+
+  return (
+    firstImage?.uri ||
+    firstImage?.resource_url ||
+    firstImage?.uri150 ||
+    release.cover_image ||
+    release.thumb ||
+    null
+  );
+};
+
+export const getReleaseCoverImage = async (releaseId: string, signal?: AbortSignal): Promise<string | null> => {
+  const url = `${DISCOGS_BASE_URL}/releases/${releaseId}`;
+  const response = await fetchDiscogsReleaseWithInterval(url, signal);
+
+  if (!response.ok) {
+    throw new Error(`Discogs API respondió con estado ${response.status}`);
+  }
+
+  const release = (await response.json()) as DiscogsReleaseDetail;
+
+  return getFirstReleaseImageUrl(release);
+};
+
 const normalizeDiscogsRelease = async (release: DiscogsRelease): Promise<AlbumResult> => {
-  // Extract artist from title (format: "Artist - Title")
   const titleParts = release.title.split(' - ');
   const artist = titleParts.length > 1 ? titleParts[0] : 'Unknown Artist';
   const title = titleParts.length > 1 ? titleParts.slice(1).join(' - ') : release.title;
 
-  // Fetch individual release to get the actual cover image
-  let coverUrl = 'https://via.placeholder.com/300x300/333/fff?text=No+Cover';
-  
-  try {
-    const response = await fetchDiscogsReleaseWithInterval(release.resource_url);
+  let coverUrl = release.cover_image || release.thumb || 'https://via.placeholder.com/300x300/333/fff?text=No+Cover';
 
-    if (response.ok) {
-      const releaseDetail = await response.json();
-      // Use the thumb from the individual release if available
-      if (releaseDetail.thumb) {
-        coverUrl = releaseDetail.thumb;
-      }
-    }
+  try {
+    coverUrl = (await getReleaseCoverImage(release.id.toString())) ?? coverUrl;
   } catch (error) {
-    // If we can't fetch the individual release, use placeholder
     console.warn(`Could not fetch release ${release.id} for preview:`, error);
   }
 
@@ -179,50 +211,27 @@ export const searchReleaseIds = async (searchTerm: string): Promise<string[]> =>
   return (data.results ?? []).map((release) => release.id.toString());
 };
 
-export const getReleaseImages = async (releaseId: string): Promise<string[]> => {
-  try {
-    const url = `${DISCOGS_BASE_URL}/releases/${releaseId}`;
+export const getReleaseImages = async (releaseId: string, signal?: AbortSignal): Promise<string[]> => {
+  const url = `${DISCOGS_BASE_URL}/releases/${releaseId}`;
+  const response = await fetchDiscogsReleaseWithInterval(url, signal);
 
-    const response = await fetchDiscogsReleaseWithInterval(url);
-
-    if (!response.ok) {
-      throw new Error(`Discogs API respondió con estado ${response.status}`);
-    }
-
-    const release = await response.json();
-    
-    console.log('Discogs release data:', release); // Debug log
-    
-    // Extract all image URLs from the release with correct Discogs structure
-    let images: string[] = [];
-    
-    if (release.images && Array.isArray(release.images)) {
-      images = release.images.map((img: any) => {
-        // Discogs images have: type, uri, resource_url, uri150, width, height
-        // Take ALL images from the array, not just the first one
-        if (img && img.uri) {
-          return img.uri; // Extract every image's URI
-        }
-        return null;
-      }).filter(Boolean);
-    }
-    
-    // Also check for other possible image fields
-    if (images.length === 0 && release.thumb) {
-      images = [release.thumb];
-    }
-    
-    if (images.length === 0 && release.cover_image) {
-      images = [release.cover_image];
-    }
-    
-    console.log(`Release ${releaseId}: Found ${images.length} images`, images);
-    
-    return images;
-  } catch (error) {
-    console.error('Error fetching Discogs release images:', error);
-    throw error;
+  if (!response.ok) {
+    throw new Error(`Discogs API respondió con estado ${response.status}`);
   }
+
+  const release = (await response.json()) as DiscogsReleaseDetail;
+  const imageUrls =
+    release.images
+      ?.map((image) => image.uri || image.resource_url || image.uri150)
+      .filter((imageUrl): imageUrl is string => Boolean(imageUrl)) ?? [];
+
+  if (imageUrls.length > 0) {
+    return imageUrls;
+  }
+
+  const fallbackImage = release.cover_image || release.thumb;
+
+  return fallbackImage ? [fallbackImage] : [];
 };
 
 
