@@ -30,4 +30,6 @@ export interface AlbumResult {
   country?: string;
   status?: string;
   coverUrl: string;
+  genres?: string[];
+  styles?: string[];
 }
