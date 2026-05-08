@@ -7,6 +7,14 @@ interface AlbumCardProps {
   apiSource: 'itunes' | 'discogs';
 }
 
+const formatTags = (tags?: string[]): string | null => {
+  if (!tags || tags.length === 0) {
+    return null;
+  }
+
+  return tags.join(', ');
+};
+
 const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
   const [imageError, setImageError] = useState(false);
   const [showModal, setShowModal] = useState(false);
@@ -16,6 +24,9 @@ const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
       speechSynthesis.getVoices();
     }
   }, []);
+
+  const genres = formatTags(album.genres);
+  const styles = formatTags(album.styles);
 
   const handlePlayAlbum = (title: string, artist: string) => {
     if ('speechSynthesis' in window) {
@@ -48,6 +59,8 @@ const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
           <p><strong>Artista:</strong> {album.artist}</p>
           {album.year && <p><strong>Año:</strong> {album.year}</p>}
           {album.country && <p><strong>País:</strong> {album.country}</p>}
+          {genres && <p><strong>Género:</strong> {genres}</p>}
+          {styles && <p><strong>Estilo:</strong> {styles}</p>}
           {album.status && <p><strong>Estado:</strong> {album.status}</p>}
           <div className="flex justify-end pt-2">
             <button

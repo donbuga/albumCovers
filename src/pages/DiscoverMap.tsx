@@ -1,15 +1,29 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
+import AlbumGrid from '../components/AlbumGrid';
+import ErrorState from '../components/ErrorState';
+import LoadingState from '../components/LoadingState';
 import DecadeSelector from '../components/discover/DecadeSelector';
 import FilterSummary from '../components/discover/FilterSummary';
 import GenreSelector from '../components/discover/GenreSelector';
 import WorldMapSelector from '../components/discover/WorldMapSelector';
 import { COUNTRY_OPTIONS, DECADE_OPTIONS, GENRE_OPTIONS } from '../constants/discoverFilters';
+import { useDiscoverAlbums } from '../hooks/useDiscoverAlbums';
 import type { CountryOption, DecadeOption, GenreOption } from '../types/discover';
 
 const DiscoverMap = () => {
   const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
   const [selectedDecade, setSelectedDecade] = useState<DecadeOption | null>(null);
   const [selectedGenres, setSelectedGenres] = useState<GenreOption[]>([]);
+  const { albums, error, hasSearched, isLoading, resetSearch, searchAlbums } = useDiscoverAlbums();
+
+  const selectedFilters = useMemo(
+    () => ({
+      country: selectedCountry,
+      decade: selectedDecade,
+      genres: selectedGenres,
+    }),
+    [selectedCountry, selectedDecade, selectedGenres],
+  );
 
   const handleToggleGenre = (genre: GenreOption) => {
     setSelectedGenres((currentGenres) =>
@@ -19,10 +33,15 @@ const DiscoverMap = () => {
     );
   };
 
+  const handleApplyFilters = () => {
+    void searchAlbums(selectedFilters);
+  };
+
   const handleClearFilters = () => {
     setSelectedCountry(null);
     setSelectedDecade(null);
     setSelectedGenres([]);
+    resetSearch();
   };
 
   return (
@@ -34,8 +53,8 @@ const DiscoverMap = () => {
             Explora álbumes desde el mapa
           </h2>
           <p className="mt-4 text-base leading-7 text-slate-400">
-            Una experiencia alternativa para descubrir música por territorio, década y estilo. Por ahora solo prepara la
-            interfaz y mantiene los filtros en estado local, sin realizar búsquedas ni conexiones externas.
+            Una experiencia alternativa para descubrir música por territorio, década y estilo con resultados reales de
+            Discogs, incluyendo portadas y metadata disponible de cada lanzamiento.
           </p>
         </div>
       </section>
@@ -59,9 +78,34 @@ const DiscoverMap = () => {
           selectedCountry={selectedCountry}
           selectedDecade={selectedDecade}
           selectedGenres={selectedGenres}
+          onApplyFilters={handleApplyFilters}
           onClearFilters={handleClearFilters}
+          isLoading={isLoading}
         />
       </div>
+
+      <section className="rounded-3xl border border-[#1a233c] bg-[#081026]/80 p-6 shadow-2xl shadow-black/20">
+        <div className="mb-5 flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-[0.24em] text-cyan-300">Resultados</p>
+            <h2 className="mt-1 text-2xl font-black text-slate-100">Álbumes encontrados</h2>
+          </div>
+          {hasSearched && !isLoading && !error && (
+            <p className="text-sm font-semibold text-slate-400">{albums.length} resultado(s)</p>
+          )}
+        </div>
+
+        {isLoading && <LoadingState />}
+        {!isLoading && error && <ErrorState message={error} />}
+        {!isLoading && !error && albums.length > 0 && <AlbumGrid albums={albums} apiSource="discogs" />}
+        {!isLoading && !error && albums.length === 0 && (
+          <p className="text-slate-400">
+            {hasSearched
+              ? 'No se encontraron álbumes para la combinación de filtros seleccionada.'
+              : 'Selecciona al menos un filtro y presiona “Apply filters” para descubrir álbumes.'}
+          </p>
+        )}
+      </section>
     </div>
   );
 };

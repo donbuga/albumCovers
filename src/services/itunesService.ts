@@ -15,6 +15,7 @@ const normalizeITunesAlbum = (album: ITunesAlbum): AlbumResult => {
     country: album.country,
     status: 'Official',
     coverUrl: album.artworkUrl100.replace('100x100', '600x600'),
+    genres: album.primaryGenreName ? [album.primaryGenreName] : undefined,
   };
 };
 

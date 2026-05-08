@@ -23,6 +23,8 @@ export interface DiscogsRelease {
   country: string;
   cover_image: string;
   thumb: string;
+  genre?: string[];
+  style?: string[];
 }
 
 export interface DiscogsReleaseDetail {

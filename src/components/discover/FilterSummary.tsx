@@ -4,10 +4,19 @@ interface FilterSummaryProps {
   selectedCountry: CountryOption | null;
   selectedDecade: DecadeOption | null;
   selectedGenres: GenreOption[];
+  onApplyFilters: () => void;
   onClearFilters: () => void;
+  isLoading?: boolean;
 }
 
-const FilterSummary = ({ selectedCountry, selectedDecade, selectedGenres, onClearFilters }: FilterSummaryProps) => {
+const FilterSummary = ({
+  selectedCountry,
+  selectedDecade,
+  selectedGenres,
+  onApplyFilters,
+  onClearFilters,
+  isLoading = false,
+}: FilterSummaryProps) => {
   const hasActiveFilters = Boolean(selectedCountry || selectedDecade || selectedGenres.length > 0);
 
   return (
@@ -40,14 +49,25 @@ const FilterSummary = ({ selectedCountry, selectedDecade, selectedGenres, onClea
         </div>
       </dl>
 
-      <button
-        type="button"
-        disabled={!hasActiveFilters}
-        onClick={onClearFilters}
-        className="mt-6 w-full rounded-2xl border border-[#31415f] px-4 py-3 text-sm font-black uppercase tracking-[0.18em] text-slate-200 transition hover:border-lime-300 hover:text-lime-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#31415f] disabled:hover:text-slate-200"
-      >
-        Clear filters
-      </button>
+      <div className="mt-6 space-y-3">
+        <button
+          type="button"
+          disabled={!hasActiveFilters || isLoading}
+          onClick={onApplyFilters}
+          className="w-full rounded-2xl bg-lime-300 px-4 py-3 text-sm font-black uppercase tracking-[0.18em] text-[#081026] transition hover:bg-lime-200 disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          {isLoading ? 'Searching...' : 'Apply filters'}
+        </button>
+
+        <button
+          type="button"
+          disabled={!hasActiveFilters || isLoading}
+          onClick={onClearFilters}
+          className="w-full rounded-2xl border border-[#31415f] px-4 py-3 text-sm font-black uppercase tracking-[0.18em] text-slate-200 transition hover:border-lime-300 hover:text-lime-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#31415f] disabled:hover:text-slate-200"
+        >
+          Clear filters
+        </button>
+      </div>
     </aside>
   );
 };
