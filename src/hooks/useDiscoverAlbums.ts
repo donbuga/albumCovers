@@ -1,4 +1,5 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
+import { useDiscogsReleaseCoverEnrichment } from './useDiscogsReleaseCoverEnrichment';
 import { searchDiscoverAlbums } from '../services/discogsService';
 import type { DiscoverAlbumFilters } from '../types/discoverAlbums';
 import type { AlbumResult } from '../types/musicBrainz';
@@ -19,6 +20,7 @@ export const useDiscoverAlbums = () => {
   const [hasSearched, setHasSearched] = useState(false);
   const activeSearchKeyRef = useRef<string | null>(null);
   const abortControllerRef = useRef<AbortController | null>(null);
+  const { enrichAlbumCovers, stopEnrichment } = useDiscogsReleaseCoverEnrichment();
 
   const searchAlbums = useCallback(async (filters: DiscoverAlbumFilters) => {
     const searchKey = buildFiltersKey(filters);
@@ -28,6 +30,7 @@ export const useDiscoverAlbums = () => {
     }
 
     abortControllerRef.current?.abort();
+    stopEnrichment();
 
     const abortController = new AbortController();
     abortControllerRef.current = abortController;
@@ -39,6 +42,11 @@ export const useDiscoverAlbums = () => {
     try {
       const results = await searchDiscoverAlbums(filters, abortController.signal);
       setAlbums(results);
+      enrichAlbumCovers(results, (albumId, coverUrl) => {
+        setAlbums((currentAlbums) =>
+          currentAlbums.map((album) => (album.id === albumId ? { ...album, coverUrl } : album)),
+        );
+      });
     } catch (searchError) {
       if (isAbortError(searchError)) {
         return;
@@ -57,17 +65,26 @@ export const useDiscoverAlbums = () => {
         activeSearchKeyRef.current = null;
       }
     }
-  }, []);
+  }, [enrichAlbumCovers, stopEnrichment]);
 
   const resetSearch = useCallback(() => {
     abortControllerRef.current?.abort();
+    stopEnrichment();
     abortControllerRef.current = null;
     activeSearchKeyRef.current = null;
     setAlbums([]);
     setIsLoading(false);
     setError(null);
     setHasSearched(false);
-  }, []);
+  }, [stopEnrichment]);
+
+  useEffect(
+    () => () => {
+      abortControllerRef.current?.abort();
+      stopEnrichment();
+    },
+    [stopEnrichment],
+  );
 
   return {
     albums,
