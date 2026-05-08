@@ -25,6 +25,10 @@ const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
     }
   }, []);
 
+  useEffect(() => {
+    setImageError(false);
+  }, [album.coverUrl]);
+
   const genres = formatTags(album.genres);
   const styles = formatTags(album.styles);
 
