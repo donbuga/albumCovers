@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
 import AlbumGrid from '../components/AlbumGrid';
+import AlbumMetadataModal from '../components/discover/AlbumMetadataModal';
 import ErrorState from '../components/ErrorState';
 import LoadingState from '../components/LoadingState';
 import DecadeSelector from '../components/discover/DecadeSelector';
@@ -9,12 +10,14 @@ import WorldMapSelector from '../components/discover/WorldMapSelector';
 import { COUNTRY_OPTIONS, DECADE_OPTIONS, GENRE_OPTIONS } from '../constants/discoverFilters';
 import { useDiscoverAlbums } from '../hooks/useDiscoverAlbums';
 import type { CountryOption, DecadeOption, GenreOption } from '../types/discover';
+import type { AlbumResult } from '../types/musicBrainz';
 
 const DiscoverMap = () => {
   const [selectedCountry, setSelectedCountry] = useState<CountryOption | null>(null);
   const [selectedDecade, setSelectedDecade] = useState<DecadeOption | null>(null);
   const [selectedGenres, setSelectedGenres] = useState<GenreOption[]>([]);
-  const { albums, error, hasSearched, isLoading, resetSearch, searchAlbums } = useDiscoverAlbums();
+  const [selectedAlbum, setSelectedAlbum] = useState<AlbumResult | null>(null);
+  const { albums, metadataByAlbumId, error, hasSearched, isLoading, resetSearch, searchAlbums } = useDiscoverAlbums();
 
   const selectedFilters = useMemo(
     () => ({
@@ -41,6 +44,7 @@ const DiscoverMap = () => {
     setSelectedCountry(null);
     setSelectedDecade(null);
     setSelectedGenres([]);
+    setSelectedAlbum(null);
     resetSearch();
   };
 
@@ -97,7 +101,9 @@ const DiscoverMap = () => {
 
         {isLoading && <LoadingState />}
         {!isLoading && error && <ErrorState message={error} />}
-        {!isLoading && !error && albums.length > 0 && <AlbumGrid albums={albums} apiSource="discogs" />}
+        {!isLoading && !error && albums.length > 0 && (
+          <AlbumGrid albums={albums} apiSource="discogs" onAlbumDetailsClick={setSelectedAlbum} />
+        )}
         {!isLoading && !error && albums.length === 0 && (
           <p className="text-slate-400">
             {hasSearched
@@ -106,6 +112,14 @@ const DiscoverMap = () => {
           </p>
         )}
       </section>
+
+      {selectedAlbum && (
+        <AlbumMetadataModal
+          album={selectedAlbum}
+          metadataState={metadataByAlbumId[selectedAlbum.id]}
+          onClose={() => setSelectedAlbum(null)}
+        />
+      )}
     </div>
   );
 };

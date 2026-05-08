@@ -5,6 +5,7 @@ import ImageModal from './ImageModal';
 interface AlbumCardProps {
   album: AlbumResult;
   apiSource: 'itunes' | 'discogs';
+  onDetailsClick?: (album: AlbumResult) => void;
 }
 
 const formatTags = (tags?: string[]): string | null => {
@@ -15,7 +16,7 @@ const formatTags = (tags?: string[]): string | null => {
   return tags.join(', ');
 };
 
-const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
+const AlbumCard = ({ album, apiSource, onDetailsClick }: AlbumCardProps) => {
   const [imageError, setImageError] = useState(false);
   const [showModal, setShowModal] = useState(false);
 
@@ -32,6 +33,15 @@ const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
   const genres = formatTags(album.genres);
   const styles = formatTags(album.styles);
 
+  const handleOpenDetails = () => {
+    if (onDetailsClick) {
+      onDetailsClick(album);
+      return;
+    }
+
+    setShowModal(true);
+  };
+
   const handlePlayAlbum = (title: string, artist: string) => {
     if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(`Okey Google, reproduce el álbum ${title} del artista ${artist}`);
@@ -44,7 +54,7 @@ const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
   return (
     <>
       <article className="overflow-hidden rounded-xl border border-[#22314f] bg-[#0b1327]/90 shadow-xl shadow-black/20">
-        <div className="aspect-square w-full cursor-pointer bg-slate-800" onClick={() => setShowModal(true)}>
+        <div className="aspect-square w-full cursor-pointer bg-slate-800" onClick={handleOpenDetails}>
           {!imageError ? (
             <img
               src={album.coverUrl}
@@ -66,9 +76,19 @@ const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
           {genres && <p><strong>Género:</strong> {genres}</p>}
           {styles && <p><strong>Estilo:</strong> {styles}</p>}
           {album.status && <p><strong>Estado:</strong> {album.status}</p>}
-          <div className="flex justify-end pt-2">
+          <div className="flex items-center justify-between gap-2 pt-2">
+            {onDetailsClick && (
+              <button
+                type="button"
+                className="rounded-full bg-cyan-400 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-slate-950 transition hover:bg-cyan-300"
+                onClick={handleOpenDetails}
+                aria-label={`Ver metadata de ${album.title}`}
+              >
+                Metadata
+              </button>
+            )}
             <button
-              className="rounded-md bg-slate-800 p-2 text-slate-300 transition hover:bg-slate-700 hover:text-white"
+              className="ml-auto rounded-md bg-slate-800 p-2 text-slate-300 transition hover:bg-slate-700 hover:text-white"
               onClick={() => handlePlayAlbum(album.title, album.artist)}
               title="Reproducir álbum con voz"
               aria-label={`Reproducir ${album.title} de ${album.artist}`}
@@ -80,7 +100,7 @@ const AlbumCard = ({ album, apiSource }: AlbumCardProps) => {
           </div>
         </div>
       </article>
-      {showModal && (
+      {showModal && !onDetailsClick && (
         <ImageModal
           releaseId={album.id}
           apiSource={apiSource}

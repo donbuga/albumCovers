@@ -1,5 +1,6 @@
 import type { AlbumResult } from '../types/musicBrainz';
 import type { DiscogsRelease, DiscogsReleaseDetail, DiscogsSearchResponse } from '../types/discogs';
+import { getFirstReleaseImageUrl } from './discogsReleaseMapper';
 import type { DiscoverAlbumFilters, YearRange } from '../types/discoverAlbums';
 import type { GenreOption } from '../types/discover';
 
@@ -72,20 +73,7 @@ const fetchDiscogsReleaseWithInterval = async (url: string, signal?: AbortSignal
   return nextRequest;
 };
 
-const getFirstReleaseImageUrl = (release: DiscogsReleaseDetail): string | null => {
-  const firstImage = release.images?.[0];
-
-  return (
-    firstImage?.uri ||
-    firstImage?.resource_url ||
-    firstImage?.uri150 ||
-    release.cover_image ||
-    release.thumb ||
-    null
-  );
-};
-
-export const getReleaseCoverImage = async (releaseId: string, signal?: AbortSignal): Promise<string | null> => {
+export const getReleaseDetail = async (releaseId: string, signal?: AbortSignal): Promise<DiscogsReleaseDetail> => {
   const url = `${DISCOGS_BASE_URL}/releases/${releaseId}`;
   const response = await fetchDiscogsReleaseWithInterval(url, signal);
 
@@ -93,7 +81,11 @@ export const getReleaseCoverImage = async (releaseId: string, signal?: AbortSign
     throw new Error(`Discogs API respondió con estado ${response.status}`);
   }
 
-  const release = (await response.json()) as DiscogsReleaseDetail;
+  return (await response.json()) as DiscogsReleaseDetail;
+};
+
+export const getReleaseCoverImage = async (releaseId: string, signal?: AbortSignal): Promise<string | null> => {
+  const release = await getReleaseDetail(releaseId, signal);
 
   return getFirstReleaseImageUrl(release);
 };

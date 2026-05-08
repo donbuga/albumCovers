@@ -1,12 +1,16 @@
 import { useCallback, useRef } from 'react';
-import { getReleaseCoverImage } from '../services/discogsService';
+import { getReleaseDetail } from '../services/discogsService';
+import { getFirstReleaseImageUrl } from '../services/discogsReleaseMapper';
+import type { DiscogsReleaseDetail } from '../types/discogs';
 import type { AlbumResult } from '../types/musicBrainz';
 
 const RELEASE_COVER_REQUEST_DELAY_MS = 3000;
 
 const isAbortError = (error: unknown): boolean => error instanceof DOMException && error.name === 'AbortError';
 
-type OnCoverLoaded = (albumId: string, coverUrl: string) => void;
+type OnReleaseLoading = (albumId: string) => void;
+type OnReleaseLoaded = (albumId: string, release: DiscogsReleaseDetail, coverUrl: string | null) => void;
+type OnReleaseError = (albumId: string, errorMessage: string) => void;
 
 const delay = (ms: number, signal: AbortSignal): Promise<void> =>
   new Promise((resolve, reject) => {
@@ -38,7 +42,12 @@ export const useDiscogsReleaseCoverEnrichment = () => {
   }, []);
 
   const enrichAlbumCovers = useCallback(
-    (albums: AlbumResult[], onCoverLoaded: OnCoverLoaded) => {
+    (
+      albums: AlbumResult[],
+      onReleaseLoaded: OnReleaseLoaded,
+      onReleaseLoading?: OnReleaseLoading,
+      onReleaseError?: OnReleaseError,
+    ) => {
       stopEnrichment();
 
       if (albums.length === 0) {
@@ -48,6 +57,8 @@ export const useDiscogsReleaseCoverEnrichment = () => {
       const abortController = new AbortController();
       const runId = enrichmentRunIdRef.current;
       abortControllerRef.current = abortController;
+
+      albums.forEach((album) => onReleaseLoading?.(album.id));
 
       const isCurrentRun = () =>
         abortControllerRef.current === abortController && enrichmentRunIdRef.current === runId;
@@ -67,14 +78,19 @@ export const useDiscogsReleaseCoverEnrichment = () => {
           }
 
           try {
-            const coverUrl = await getReleaseCoverImage(album.id, abortController.signal);
+            const release = await getReleaseDetail(album.id, abortController.signal);
+            const coverUrl = getFirstReleaseImageUrl(release);
 
-            if (coverUrl && !abortController.signal.aborted && isCurrentRun()) {
-              onCoverLoaded(album.id, coverUrl);
+            if (!abortController.signal.aborted && isCurrentRun()) {
+              onReleaseLoaded(album.id, release, coverUrl);
             }
           } catch (error) {
             if (!isAbortError(error)) {
               console.warn(`No se pudo enriquecer la portada del release ${album.id}:`, error);
+              onReleaseError?.(
+                album.id,
+                error instanceof Error ? error.message : 'No se pudo cargar la metadata del release.',
+              );
             }
           }
         }
