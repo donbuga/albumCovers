@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import type { AlbumResult } from '../types/musicBrainz';
 import ImageModal from './ImageModal';
+import ExternalSearchModal from './ExternalSearchModal';
 
 interface AlbumCardProps {
   album: AlbumResult;
@@ -19,6 +20,7 @@ const formatTags = (tags?: string[]): string | null => {
 const AlbumCard = ({ album, apiSource, onDetailsClick }: AlbumCardProps) => {
   const [imageError, setImageError] = useState(false);
   const [showModal, setShowModal] = useState(false);
+  const [showExploreModal, setShowExploreModal] = useState(false);
 
   useEffect(() => {
     if ('speechSynthesis' in window) {
@@ -40,6 +42,14 @@ const AlbumCard = ({ album, apiSource, onDetailsClick }: AlbumCardProps) => {
     }
 
     setShowModal(true);
+  };
+
+  const handleOpenExplore = () => {
+    setShowExploreModal(true);
+  };
+
+  const handleCloseExplore = () => {
+    setShowExploreModal(false);
   };
 
   const handlePlayAlbum = (title: string, artist: string) => {
@@ -87,19 +97,43 @@ const AlbumCard = ({ album, apiSource, onDetailsClick }: AlbumCardProps) => {
                 Metadata
               </button>
             )}
-            <button
-              className="ml-auto rounded-md bg-slate-800 p-2 text-slate-300 transition hover:bg-slate-700 hover:text-white"
-              onClick={() => handlePlayAlbum(album.title, album.artist)}
-              title="Reproducir álbum con voz"
-              aria-label={`Reproducir ${album.title} de ${album.artist}`}
-            >
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-              </svg>
-            </button>
+            <div className="ml-auto flex items-center gap-2">
+              <button
+                className="inline-flex items-center gap-1.5 rounded-md bg-slate-800 px-3 py-2 text-xs font-bold text-slate-300 transition hover:bg-slate-700 hover:text-white"
+                onClick={handleOpenExplore}
+                title="Explorar álbum en plataformas externas"
+                aria-label={`Explorar búsquedas externas para ${album.title} de ${album.artist}`}
+              >
+                <svg
+                  aria-hidden="true"
+                  className="h-4 w-4"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10" />
+                  <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
+                </svg>
+                Explorar
+              </button>
+              <button
+                className="rounded-md bg-slate-800 p-2 text-slate-300 transition hover:bg-slate-700 hover:text-white"
+                onClick={() => handlePlayAlbum(album.title, album.artist)}
+                title="Reproducir álbum con voz"
+                aria-label={`Reproducir ${album.title} de ${album.artist}`}
+              >
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
       </article>
+      <ExternalSearchModal album={album} artist={album.artist} isOpen={showExploreModal} onClose={handleCloseExplore} />
       {showModal && !onDetailsClick && (
         <ImageModal
           releaseId={album.id}
