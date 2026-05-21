@@ -50,6 +50,14 @@ export interface DiscogsIdentifier {
   description?: string;
 }
 
+export interface DiscogsVideo {
+  uri?: string;
+  title?: string;
+  description?: string;
+  duration?: number;
+  embed?: boolean;
+}
+
 export interface DiscogsCommunityRating {
   average?: number;
   count?: number;
@@ -117,6 +125,7 @@ export interface DiscogsReleaseDetail {
   community?: DiscogsCommunity;
   num_for_sale?: number;
   lowest_price?: number;
+  videos?: DiscogsVideo[];
 }
 
 export interface DiscogsSearchResponse {
@@ -156,6 +165,13 @@ export interface AlbumMetadataImage {
   height?: number;
 }
 
+export interface AlbumMetadataVideo {
+  title: string;
+  url: string;
+  duration?: number;
+  description?: string;
+}
+
 export interface AlbumMetadata {
   id: string;
   title: string;
@@ -188,6 +204,7 @@ export interface AlbumMetadata {
   communityHave?: number;
   communityWant?: number;
   notes?: string;
+  videos: AlbumMetadataVideo[];
 }
 
 export type AlbumMetadataStatus = 'idle' | 'loading' | 'success' | 'error';

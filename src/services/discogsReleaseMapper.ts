@@ -54,6 +54,16 @@ const buildExternalUrl = (uri?: string): string | undefined => {
   return uri.startsWith('http') ? uri : `${DISCOGS_PUBLIC_BASE_URL}${uri}`;
 };
 
+const mapVideos = (release: DiscogsReleaseDetail) =>
+  (release.videos ?? [])
+    .map((video) => ({
+      title: (video.title ?? '').trim() || 'Video',
+      url: (video.uri ?? '').trim(),
+      duration: video.duration,
+      description: video.description,
+    }))
+    .filter((video) => Boolean(video.url));
+
 export const getFirstReleaseImageUrl = (release: DiscogsReleaseDetail): string | null => {
   const firstImage = release.images?.[0];
 
@@ -120,5 +130,6 @@ export const mapDiscogsReleaseToAlbumMetadata = (release: DiscogsReleaseDetail):
     communityHave: release.community?.have,
     communityWant: release.community?.want,
     notes: release.notes,
+    videos: mapVideos(release),
   };
 };
