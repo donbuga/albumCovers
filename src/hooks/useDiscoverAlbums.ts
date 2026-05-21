@@ -58,7 +58,17 @@ export const useDiscoverAlbums = () => {
           const metadata = mapDiscogsReleaseToAlbumMetadata(release);
 
           setAlbums((currentAlbums) =>
-            currentAlbums.map((album) => (album.id === albumId && coverUrl ? { ...album, coverUrl } : album)),
+            currentAlbums.map((album) => {
+              if (album.id !== albumId) {
+                return album;
+              }
+
+              return {
+                ...album,
+                ...(coverUrl ? { coverUrl } : {}),
+                videoUrls: metadata.videos.map((video) => video.url),
+              };
+            }),
           );
           setMetadataByAlbumId((currentMetadata) => ({
             ...currentMetadata,

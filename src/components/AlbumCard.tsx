@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import type { AlbumResult } from '../types/musicBrainz';
 import ImageModal from './ImageModal';
 import ExternalSearchModal from './ExternalSearchModal';
+import AlbumVideosModal from './AlbumVideosModal';
 
 interface AlbumCardProps {
   album: AlbumResult;
@@ -21,6 +22,7 @@ const AlbumCard = ({ album, apiSource, onDetailsClick }: AlbumCardProps) => {
   const [imageError, setImageError] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [showExploreModal, setShowExploreModal] = useState(false);
+  const [showVideosModal, setShowVideosModal] = useState(false);
 
   useEffect(() => {
     if ('speechSynthesis' in window) {
@@ -61,6 +63,8 @@ const AlbumCard = ({ album, apiSource, onDetailsClick }: AlbumCardProps) => {
     }
   };
 
+  const hasVideos = (album.videoUrls?.length ?? 0) > 0;
+
   return (
     <>
       <article className="overflow-hidden rounded-xl border border-[#22314f] bg-[#0b1327]/90 shadow-xl shadow-black/20">
@@ -98,6 +102,16 @@ const AlbumCard = ({ album, apiSource, onDetailsClick }: AlbumCardProps) => {
               </button>
             )}
             <div className="ml-auto flex items-center gap-2">
+              {hasVideos && (
+                <button
+                  className="inline-flex items-center gap-1.5 rounded-md bg-red-700/90 px-3 py-2 text-xs font-bold text-white transition hover:bg-red-600"
+                  onClick={() => setShowVideosModal(true)}
+                  title="Ver videos asociados al release"
+                  aria-label={`Ver videos de ${album.title}`}
+                >
+                  Videos
+                </button>
+              )}
               <button
                 className="inline-flex items-center gap-1.5 rounded-md bg-slate-800 px-3 py-2 text-xs font-bold text-slate-300 transition hover:bg-slate-700 hover:text-white"
                 onClick={handleOpenExplore}
@@ -134,6 +148,14 @@ const AlbumCard = ({ album, apiSource, onDetailsClick }: AlbumCardProps) => {
         </div>
       </article>
       <ExternalSearchModal album={album} artist={album.artist} isOpen={showExploreModal} onClose={handleCloseExplore} />
+      {showVideosModal && hasVideos && (
+        <AlbumVideosModal
+          albumTitle={album.title}
+          artist={album.artist}
+          videoUrls={album.videoUrls ?? []}
+          onClose={() => setShowVideosModal(false)}
+        />
+      )}
       {showModal && !onDetailsClick && (
         <ImageModal
           releaseId={album.id}

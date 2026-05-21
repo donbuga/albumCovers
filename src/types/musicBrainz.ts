@@ -32,4 +32,5 @@ export interface AlbumResult {
   coverUrl: string;
   genres?: string[];
   styles?: string[];
+  videoUrls?: string[];
 }

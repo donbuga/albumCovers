@@ -96,9 +96,14 @@ const normalizeDiscogsRelease = async (release: DiscogsRelease): Promise<AlbumRe
   const title = titleParts.length > 1 ? titleParts.slice(1).join(' - ') : release.title;
 
   let coverUrl = release.cover_image || release.thumb || 'https://via.placeholder.com/300x300/333/fff?text=No+Cover';
+  let videoUrls: string[] | undefined;
 
   try {
-    coverUrl = (await getReleaseCoverImage(release.id.toString())) ?? coverUrl;
+    const releaseDetail = await getReleaseDetail(release.id.toString());
+    coverUrl = getFirstReleaseImageUrl(releaseDetail) ?? coverUrl;
+    videoUrls = releaseDetail.videos
+      ?.map((video) => (video.uri ?? '').trim())
+      .filter((url): url is string => Boolean(url));
   } catch (error) {
     console.warn(`Could not fetch release ${release.id} for preview:`, error);
   }
@@ -114,6 +119,7 @@ const normalizeDiscogsRelease = async (release: DiscogsRelease): Promise<AlbumRe
     coverUrl,
     genres: release.genre,
     styles: release.style,
+    videoUrls,
   };
 };
 
