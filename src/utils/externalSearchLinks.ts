@@ -74,7 +74,7 @@ export const EXTERNAL_SEARCH_PROVIDERS: ExternalSearchProvider[] = [
   {
     id: 'wikipedia',
     name: 'Wikipedia',
-    baseUrl: 'https://en.wikipedia.org/w/index.php',
+    baseUrl: 'https://es.wikipedia.org/w/index.php',
     queryParam: 'search',
     icon: '📚',
   },
