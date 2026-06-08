@@ -38,13 +38,18 @@ const SearchPage = () => {
   };
 
   return (
-    <>
+    <section className="rounded-3xl border border-[#1a233c] bg-[#071022]/70 p-6 shadow-xl shadow-black/10">
+      <div className="mb-5 max-w-2xl">
+        <p className="text-xs font-bold uppercase tracking-[0.24em] text-slate-500">Búsqueda directa</p>
+        <h2 className="mt-2 text-2xl font-black text-slate-100">Busca un artista o álbum específico</h2>
+        <p className="mt-2 text-sm leading-6 text-slate-400">¿Ya sabes lo que buscas? Encuéntralo directo.</p>
+      </div>
       <SearchBar onSearch={handleSearch} disabled={isLoading} />
       {isLoading && <LoadingState />}
       {!isLoading && error && <ErrorState message={error} />}
       {!isLoading && !error && albums.length > 0 && <AlbumGrid albums={albums} apiSource={apiSource} />}
       {!isLoading && !error && albums.length === 0 && <EmptyState hasSearched={hasSearched} />}
-    </>
+    </section>
   );
 };
 

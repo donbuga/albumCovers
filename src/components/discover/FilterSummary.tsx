@@ -27,11 +27,11 @@ const FilterSummary = ({
       <dl className="mt-5 space-y-4 text-sm">
         <div>
           <dt className="font-bold uppercase tracking-[0.16em] text-slate-500">País</dt>
-          <dd className="mt-1 text-lg font-semibold text-slate-100">{selectedCountry?.name ?? 'Sin seleccionar'}</dd>
+          <dd className="mt-1 text-lg font-semibold text-slate-100">{selectedCountry?.name ?? 'Elige un país'}</dd>
         </div>
         <div>
           <dt className="font-bold uppercase tracking-[0.16em] text-slate-500">Década</dt>
-          <dd className="mt-1 text-lg font-semibold text-slate-100">{selectedDecade ?? 'Sin seleccionar'}</dd>
+          <dd className="mt-1 text-lg font-semibold text-slate-100">{selectedDecade ?? 'Cualquier década'}</dd>
         </div>
         <div>
           <dt className="font-bold uppercase tracking-[0.16em] text-slate-500">Géneros</dt>
@@ -43,7 +43,7 @@ const FilterSummary = ({
                 </span>
               ))
             ) : (
-              <span className="text-lg font-semibold text-slate-100">Sin seleccionar</span>
+              <span className="text-lg font-semibold text-slate-100">Cualquier género</span>
             )}
           </dd>
         </div>
@@ -56,7 +56,7 @@ const FilterSummary = ({
           onClick={onApplyFilters}
           className="w-full rounded-2xl bg-lime-300 px-4 py-3 text-sm font-black uppercase tracking-[0.18em] text-[#081026] transition hover:bg-lime-200 disabled:cursor-not-allowed disabled:opacity-40"
         >
-          {isLoading ? 'Searching...' : 'Apply filters'}
+          {isLoading ? 'Buscando en los archivos...' : 'Descubrir álbumes'}
         </button>
 
         <button
@@ -65,7 +65,7 @@ const FilterSummary = ({
           onClick={onClearFilters}
           className="w-full rounded-2xl border border-[#31415f] px-4 py-3 text-sm font-black uppercase tracking-[0.18em] text-slate-200 transition hover:border-lime-300 hover:text-lime-200 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:border-[#31415f] disabled:hover:text-slate-200"
         >
-          Clear filters
+          Limpiar filtros
         </button>
       </div>
     </aside>

@@ -25,7 +25,10 @@ const App = () => {
     <main className="min-h-screen bg-[#050812] text-slate-100">
       <div className="mx-auto max-w-6xl px-6 pb-10 pt-6">
         <AppHeader currentRoute={currentRoute} />
-        {currentRoute === '/discover-map' ? <DiscoverMap /> : <SearchPage />}
+        <div className="space-y-10">
+          <DiscoverMap />
+          <SearchPage />
+        </div>
       </div>
     </main>
   );

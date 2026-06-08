@@ -3,8 +3,8 @@ interface AppHeaderProps {
 }
 
 const navItems = [
+  { href: '#/discover-map', label: 'Explorar', route: '/discover-map' },
   { href: '#/', label: 'Buscar', route: '/' },
-  { href: '#/discover-map', label: 'DiscoverMap', route: '/discover-map' },
 ];
 
 const AppHeader = ({ currentRoute }: AppHeaderProps) => (
@@ -12,9 +12,11 @@ const AppHeader = ({ currentRoute }: AppHeaderProps) => (
     <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
       <div>
         <h1 className="text-5xl font-black uppercase tracking-wider text-slate-200">
-          Dis<span className="text-lime-300">cover</span> <span className="text-lime-300">Music</span>
+          Sound<span className="text-lime-300">Map</span>
         </h1>
-        <p className="text-sm tracking-[0.2em] text-slate-500">// descubre carátulas de discos y más</p>
+        <p className="mt-2 max-w-2xl text-base leading-7 text-slate-400">
+          Descubre álbumes por el país, la época y el sonido que los definió
+        </p>
       </div>
 
       <nav className="flex w-full flex-col gap-2 rounded-2xl border border-[#1a233c] bg-[#081026]/80 p-2 sm:w-auto sm:flex-row" aria-label="Navegación principal">
