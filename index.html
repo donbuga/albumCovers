@@ -27,11 +27,18 @@
         justify-content: center;
         gap: 4px;
         opacity: 0;
-        transition: opacity 0.5s ease;
+        pointer-events: none;
+        cursor: pointer;
+        transition: opacity 0.5s ease, filter 0.2s ease;
       }
 
       #discovery-slider .slide.active {
         opacity: 1;
+        pointer-events: auto;
+      }
+
+      #discovery-slider .slide.active:hover {
+        filter: brightness(1.18);
       }
 
       #discovery-slider .slide-kicker {
@@ -109,13 +116,153 @@
             window.clearInterval(sliderInterval);
             sliderInterval = window.setInterval(() => {
               showSlide((currentSlide + 1) % slides.length);
-            }, 3000);
+            }, 6000);
+          };
+
+          const normalize = (value) =>
+            String(value || '')
+              .toLowerCase()
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim();
+
+          const getText = (element) => normalize(`${element.value || ''} ${element.textContent || ''} ${element.getAttribute('aria-label') || ''}`);
+
+          const findClosestOption = (options, value) => {
+            const normalizedValue = normalize(value);
+
+            if (!normalizedValue) {
+              return null;
+            }
+
+            const valueWords = normalizedValue.split(' ').filter(Boolean);
+
+            return (
+              options.find((option) => {
+                const optionText = getText(option);
+                return optionText.includes(normalizedValue) || normalizedValue.includes(optionText);
+              }) ||
+              options.find((option) => {
+                const optionText = getText(option);
+                return valueWords.some((word) => optionText.includes(word));
+              }) ||
+              null
+            );
+          };
+
+          const triggerClick = (element) => {
+            if (typeof element.click === 'function') {
+              element.click();
+              return;
+            }
+
+            element.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+          };
+
+          const clickIfNeeded = (element, isActive) => {
+            if (element && !isActive(element)) {
+              triggerClick(element);
+            }
+          };
+
+          const findButtonByText = (text) =>
+            Array.from(document.querySelectorAll('button')).find((button) => normalize(button.textContent).includes(normalize(text)));
+
+          const closestGenreByName = {
+            afrobeat: 'folk',
+            'bossa nova': 'jazz',
+            flamenco: 'folk',
+            'post punk': 'rock',
+            soul: 'pop',
+          };
+
+          const scrollToDiscoverMap = () => {
+            const map = document.querySelector('svg[aria-label="Mapa del mundo para seleccionar un país"]');
+            (map?.closest('section') || slider).scrollIntoView({ behavior: 'smooth', block: 'start' });
+          };
+
+          const scrollToResults = () => {
+            const resultsTitle = Array.from(document.querySelectorAll('h2')).find((heading) => normalize(heading.textContent).includes('albumes encontrados'));
+            (resultsTitle?.closest('section') || slider).scrollIntoView({ behavior: 'smooth', block: 'start' });
+          };
+
+          const expandFilters = (callback) => {
+            const expandButton = findButtonByText('Expandir filtros');
+
+            if (expandButton) {
+              triggerClick(expandButton);
+              window.setTimeout(callback, 80);
+              return;
+            }
+
+            callback();
+          };
+
+          const clearFilters = (callback) => {
+            const clearButton = findButtonByText('Limpiar filtros');
+
+            if (clearButton && !clearButton.disabled) {
+              triggerClick(clearButton);
+              window.setTimeout(callback, 80);
+              return;
+            }
+
+            callback();
+          };
+
+          const applySlideFilters = (slide) => {
+            const { country, decade, genre } = slide.dataset;
+
+            if (!country && !decade && !genre) {
+              scrollToDiscoverMap();
+              return;
+            }
+
+            expandFilters(() => {
+              clearFilters(() => {
+                const countryOptions = Array.from(document.querySelectorAll('g[role="button"][aria-label^="Seleccionar "]'));
+                const countryOption = findClosestOption(countryOptions, country);
+                clickIfNeeded(countryOption, (element) => element.getAttribute('aria-pressed') === 'true');
+
+                const decadeButtons = Array.from(document.querySelectorAll('[role="radiogroup"] button[role="radio"]'));
+                const decadeButton = findClosestOption(decadeButtons, decade);
+                clickIfNeeded(decadeButton, (element) => element.getAttribute('aria-checked') === 'true');
+
+                const genreButtons = Array.from(document.querySelectorAll('button[aria-pressed]')).filter(
+                  (button) => !button.matches('g[role="button"]'),
+                );
+                genreButtons.forEach((button) => {
+                  if (button.getAttribute('aria-pressed') === 'true') {
+                    button.click();
+                  }
+                });
+                const genreButton = findClosestOption(genreButtons, genre) || findClosestOption(genreButtons, closestGenreByName[normalize(genre)]);
+                clickIfNeeded(genreButton, (element) => element.getAttribute('aria-pressed') === 'true');
+
+                window.setTimeout(() => {
+                  const discoverButton = findButtonByText('Descubrir álbumes');
+
+                  if (discoverButton && !discoverButton.disabled) {
+                    triggerClick(discoverButton);
+                  }
+
+                  scrollToResults();
+                }, 80);
+              });
+            });
           };
 
           dots.forEach((dot, dotIndex) => {
             dot.addEventListener('click', () => {
               showSlide(dotIndex);
               startSlider();
+            });
+          });
+
+          slides.forEach((slide) => {
+            slide.addEventListener('click', () => {
+              applySlideFilters(slide);
             });
           });
 

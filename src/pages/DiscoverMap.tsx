@@ -60,19 +60,19 @@ const DiscoverMap = () => {
   return (
     <div className="space-y-6">
       <div id="discovery-slider">
-        <div className="slide active">
+        <div className="slide active" data-country="Jamaica" data-decade="1970s" data-genre="Reggae">
           <p className="slide-kicker">¿Qué sonaba en Jamaica en los 70s?</p>
           <p className="slide-title">Descubre el reggae en su lugar de origen</p>
         </div>
-        <div className="slide">
+        <div className="slide" data-country="United Kingdom" data-decade="1980s" data-genre="Post-Punk">
           <p className="slide-kicker">Londres · 1980s · Post-punk</p>
           <p className="slide-title">El sonido que cambió una generación</p>
         </div>
-        <div className="slide">
+        <div className="slide" data-country="Brazil" data-decade="1960s" data-genre="Bossa Nova">
           <p className="slide-kicker">¿De dónde viene el bossa nova?</p>
           <p className="slide-title">Brasil, 1960s — explóralo ahora</p>
         </div>
-        <div className="slide">
+        <div className="slide" data-country="United States" data-decade="1950s" data-genre="Blues">
           <p className="slide-kicker">Chicago · 1950s · Blues</p>
           <p className="slide-title">El origen de todo lo que vino después</p>
         </div>
@@ -80,8 +80,33 @@ const DiscoverMap = () => {
           <p className="slide-kicker">¿Qué géneros nacieron en tu país?</p>
           <p className="slide-title">Elige un país en el mapa y descúbrelo</p>
         </div>
+        <div className="slide" data-country="United States" data-decade="1960s" data-genre="Soul">
+          <p className="slide-kicker">Detroit · 1960s · Soul</p>
+          <p className="slide-title">Motown: la fábrica de hits que conquistó el mundo</p>
+        </div>
+        <div className="slide" data-country="Germany" data-decade="1970s" data-genre="Electronic">
+          <p className="slide-kicker">¿Qué escuchaban en Alemania en los 70s?</p>
+          <p className="slide-title">Krautrock y electrónica — el futuro sonaba así</p>
+        </div>
+        <div className="slide" data-country="United States" data-decade="1970s" data-genre="Jazz">
+          <p className="slide-kicker">Nueva York · 1970s · Jazz Fusion</p>
+          <p className="slide-title">Cuando el jazz decidió romper todas las reglas</p>
+        </div>
+        <div className="slide" data-country="Spain" data-decade="1960s" data-genre="Flamenco">
+          <p className="slide-kicker">¿De dónde viene el flamenco más puro?</p>
+          <p className="slide-title">España, 1960s — raíces que todavía vibran</p>
+        </div>
+        <div className="slide" data-country="Nigeria" data-decade="1970s" data-genre="Afrobeat">
+          <p className="slide-kicker">Lagos · 1970s · Afrobeat</p>
+          <p className="slide-title">Fela Kuti y el ritmo que desafió al poder</p>
+        </div>
         <div className="slider-dots">
           <span className="dot active"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
           <span className="dot"></span>
           <span className="dot"></span>
           <span className="dot"></span>
