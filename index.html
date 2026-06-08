@@ -6,10 +6,136 @@
     <link rel="icon" type="image/svg+xml" href="/albumCovers/favicon.svg" />
     <title>SoundMap — Descubre música por su origen</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #discovery-slider {
+        position: relative;
+        min-height: 90px;
+        max-height: 90px;
+        overflow: hidden;
+        border: 1px solid #1a233c;
+        border-radius: 1.5rem;
+        background: linear-gradient(135deg, #0f1d3b, #081026, #050812);
+        box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.3);
+        padding: 14px 18px 18px;
+      }
+
+      #discovery-slider .slide {
+        position: absolute;
+        inset: 14px 18px 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        opacity: 0;
+        transition: opacity 0.5s ease;
+      }
+
+      #discovery-slider .slide.active {
+        opacity: 1;
+      }
+
+      #discovery-slider .slide-kicker {
+        margin: 0;
+        color: #bef264;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        line-height: 1.1;
+        text-transform: uppercase;
+      }
+
+      #discovery-slider .slide-title {
+        margin: 0;
+        color: #ffffff;
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      #discovery-slider .slider-dots {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+      }
+
+      #discovery-slider .dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        background: #bef264;
+        cursor: pointer;
+        opacity: 0.3;
+      }
+
+      #discovery-slider .dot.active {
+        opacity: 1;
+      }
+    </style>
   <script>tailwind.config = { theme: { extend: {} } };</script>
 </head>
   <body>
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const setupDiscoverySlider = () => {
+          const slider = document.getElementById('discovery-slider');
+
+          if (!slider || slider.dataset.sliderReady === 'true') {
+            return Boolean(slider);
+          }
+
+          const slides = Array.from(slider.querySelectorAll('.slide'));
+          const dots = Array.from(slider.querySelectorAll('.dot'));
+          let currentSlide = Math.max(
+            0,
+            slides.findIndex((slide) => slide.classList.contains('active')),
+          );
+          let sliderInterval;
+
+          const showSlide = (nextSlide) => {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = nextSlide;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+          };
+
+          const startSlider = () => {
+            window.clearInterval(sliderInterval);
+            sliderInterval = window.setInterval(() => {
+              showSlide((currentSlide + 1) % slides.length);
+            }, 3000);
+          };
+
+          dots.forEach((dot, dotIndex) => {
+            dot.addEventListener('click', () => {
+              showSlide(dotIndex);
+              startSlider();
+            });
+          });
+
+          slider.dataset.sliderReady = 'true';
+          startSlider();
+          return true;
+        };
+
+        if (setupDiscoverySlider()) {
+          return;
+        }
+
+        const sliderObserver = new MutationObserver(() => {
+          if (setupDiscoverySlider()) {
+            sliderObserver.disconnect();
+          }
+        });
+
+        sliderObserver.observe(document.body, { childList: true, subtree: true });
+      });
+    </script>
   </body>
 </html>

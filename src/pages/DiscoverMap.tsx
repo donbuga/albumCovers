@@ -59,17 +59,35 @@ const DiscoverMap = () => {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-3xl border border-[#1a233c] bg-gradient-to-br from-[#0f1d3b] via-[#081026] to-[#050812] p-6 shadow-2xl shadow-black/30">
-        <div className="max-w-3xl">
-          <p className="inline-flex rounded-full border border-lime-300/40 bg-lime-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.24em] text-lime-200">✦ Empieza aquí</p>
-          <h2 className="mt-3 text-4xl font-black uppercase tracking-wide text-slate-100 sm:text-6xl">
-            Explora por origen
-          </h2>
-          <p className="mt-4 text-lg leading-8 text-slate-300">
-            Elige un país en el mapa, selecciona una década y un género — y deja que la música llegue a ti.
-          </p>
+      <div id="discovery-slider">
+        <div className="slide active">
+          <p className="slide-kicker">¿Qué sonaba en Jamaica en los 70s?</p>
+          <p className="slide-title">Descubre el reggae en su lugar de origen</p>
         </div>
-      </section>
+        <div className="slide">
+          <p className="slide-kicker">Londres · 1980s · Post-punk</p>
+          <p className="slide-title">El sonido que cambió una generación</p>
+        </div>
+        <div className="slide">
+          <p className="slide-kicker">¿De dónde viene el bossa nova?</p>
+          <p className="slide-title">Brasil, 1960s — explóralo ahora</p>
+        </div>
+        <div className="slide">
+          <p className="slide-kicker">Chicago · 1950s · Blues</p>
+          <p className="slide-title">El origen de todo lo que vino después</p>
+        </div>
+        <div className="slide">
+          <p className="slide-kicker">¿Qué géneros nacieron en tu país?</p>
+          <p className="slide-title">Elige un país en el mapa y descúbrelo</p>
+        </div>
+        <div className="slider-dots">
+          <span className="dot active"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
+          <span className="dot"></span>
+        </div>
+      </div>
 
       {hasSearched && (
         <section className="rounded-3xl border border-lime-300/25 bg-[#081026]/95 p-4 shadow-2xl shadow-black/20">
