@@ -7,8 +7,8 @@ const routes = ['/', '/discover-map'] as const;
 type AppRoute = (typeof routes)[number];
 
 const getRouteFromHash = (): AppRoute => {
-  const hashRoute = window.location.hash.replace(/^#/, '') || '/';
-  return routes.includes(hashRoute as AppRoute) ? (hashRoute as AppRoute) : '/';
+  const hashRoute = window.location.hash.replace(/^#/, '') || '/discover-map';
+  return routes.includes(hashRoute as AppRoute) ? (hashRoute as AppRoute) : '/discover-map';
 };
 
 const App = () => {
@@ -21,13 +21,25 @@ const App = () => {
     return () => window.removeEventListener('hashchange', handleHashChange);
   }, []);
 
+  useEffect(() => {
+    if (currentRoute === '/') {
+      window.requestAnimationFrame(() => {
+        document.querySelector<HTMLInputElement>('input[aria-label=\"Buscar álbumes\"]')?.focus();
+      });
+    }
+  }, [currentRoute]);
+
   return (
     <main className="min-h-screen bg-[#050812] text-slate-100">
       <div className="mx-auto max-w-6xl px-6 pb-10 pt-6">
         <AppHeader currentRoute={currentRoute} />
         <div className="space-y-10">
-          <DiscoverMap />
-          <SearchPage />
+          <div style={{ display: currentRoute === '/discover-map' ? 'block' : 'none' }}>
+            <DiscoverMap />
+          </div>
+          <div style={{ display: currentRoute === '/' ? 'block' : 'none' }}>
+            <SearchPage />
+          </div>
         </div>
       </div>
     </main>

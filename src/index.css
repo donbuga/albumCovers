@@ -9,3 +9,9 @@ body {
   font-family: Inter, system-ui, sans-serif;
   background: radial-gradient(circle at 20% 0%, #0d1631 0%, #050812 50%);
 }
+
+.active {
+  font-weight: bold;
+  border-bottom: 2px solid currentColor;
+  opacity: 1;
+}

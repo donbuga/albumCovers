@@ -30,8 +30,8 @@ const AppHeader = ({ currentRoute }: AppHeaderProps) => (
               aria-current={isActive ? 'page' : undefined}
               className={`rounded-xl px-4 py-2 text-center text-sm font-bold uppercase tracking-[0.18em] transition duration-200 ${
                 isActive
-                  ? 'bg-lime-300 text-[#050812] shadow-lg shadow-lime-300/20'
-                  : 'text-slate-400 hover:bg-[#111b34] hover:text-slate-100'
+                  ? 'active bg-lime-300 text-[#050812] shadow-lg shadow-lime-300/20'
+                  : 'opacity-50 text-slate-400 hover:bg-[#111b34] hover:text-slate-100 hover:opacity-100'
               }`}
             >
               {item.label}
