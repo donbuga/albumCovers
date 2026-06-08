@@ -19,7 +19,7 @@ const SearchBar = ({ onSearch, disabled = false }: SearchBarProps) => {
         type="text"
         value={term}
         onChange={(event) => setTerm(event.target.value)}
-        placeholder="Busca por artista, álbum o disco"
+        placeholder="ej. Björk, Pink Floyd, Coltrane..."
         aria-label="Buscar álbumes"
         disabled={disabled}
         className="w-full rounded-xl border border-[#2a3758] bg-[#0b1224] px-4 py-3 text-slate-100 placeholder:text-slate-500 outline-none focus:border-lime-300"
@@ -29,7 +29,7 @@ const SearchBar = ({ onSearch, disabled = false }: SearchBarProps) => {
         disabled={disabled || term.trim().length === 0}
         className="rounded-xl bg-lime-300 px-6 py-3 font-semibold uppercase tracking-wider text-[#0f172a] transition hover:brightness-105 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        Buscar
+        Buscar álbumes
       </button>
     </form>
   );

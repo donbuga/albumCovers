@@ -52,7 +52,7 @@ const DiscoverMap = () => {
   };
 
   const resultStatus = isLoading
-    ? 'Buscando resultados…'
+    ? 'Buscando en los archivos...'
     : error
       ? 'No se pudieron cargar resultados'
       : `${albums.length} resultado(s)`;
@@ -61,13 +61,12 @@ const DiscoverMap = () => {
     <div className="space-y-6">
       <section className="rounded-3xl border border-[#1a233c] bg-gradient-to-br from-[#0f1d3b] via-[#081026] to-[#050812] p-6 shadow-2xl shadow-black/30">
         <div className="max-w-3xl">
-          <p className="text-xs font-bold uppercase tracking-[0.28em] text-lime-300">DiscoverMap</p>
-          <h2 className="mt-3 text-4xl font-black uppercase tracking-wide text-slate-100 sm:text-5xl">
-            Explora álbumes desde el mapa
+          <p className="inline-flex rounded-full border border-lime-300/40 bg-lime-300/10 px-3 py-1 text-xs font-bold uppercase tracking-[0.24em] text-lime-200">✦ Empieza aquí</p>
+          <h2 className="mt-3 text-4xl font-black uppercase tracking-wide text-slate-100 sm:text-6xl">
+            Explora por origen
           </h2>
-          <p className="mt-4 text-base leading-7 text-slate-400">
-            Una experiencia alternativa para descubrir música por territorio, década y estilo con resultados reales de
-            Discogs, incluyendo portadas y metadata disponible de cada lanzamiento.
+          <p className="mt-4 text-lg leading-8 text-slate-300">
+            Elige un país en el mapa, selecciona una década y un género — y deja que la música llegue a ti.
           </p>
         </div>
       </section>
@@ -79,10 +78,10 @@ const DiscoverMap = () => {
               <p className="text-xs font-bold uppercase tracking-[0.24em] text-lime-300">Filtros aplicados</p>
               <div className="mt-2 flex flex-wrap items-center gap-2" aria-label="Resumen compacto de filtros aplicados">
                 <span className="rounded-full bg-slate-100/10 px-3 py-1 text-sm font-bold text-slate-100">
-                  {selectedCountry?.name ?? 'Todos los países'}
+                  {selectedCountry?.name ?? 'Elige un país'}
                 </span>
                 <span className="rounded-full bg-slate-100/10 px-3 py-1 text-sm font-bold text-slate-100">
-                  {selectedDecade ?? 'Todas las décadas'}
+                  {selectedDecade ?? 'Cualquier década'}
                 </span>
                 {selectedGenres.length > 0 ? (
                   selectedGenres.map((genre) => (
@@ -92,7 +91,7 @@ const DiscoverMap = () => {
                   ))
                 ) : (
                   <span className="rounded-full bg-cyan-300/10 px-3 py-1 text-sm font-bold text-cyan-100">
-                    Todos los estilos
+                    Cualquier género
                   </span>
                 )}
               </div>
@@ -165,8 +164,8 @@ const DiscoverMap = () => {
         {!isLoading && !error && albums.length === 0 && (
           <p className="text-slate-400">
             {hasSearched
-              ? 'No se encontraron álbumes para la combinación de filtros seleccionada.'
-              : 'Selecciona al menos un filtro y presiona “Apply filters” para descubrir álbumes.'}
+              ? 'No se encontraron álbumes. Prueba con otro artista o explora el mapa.'
+              : 'Los resultados aparecerán aquí'}
           </p>
         )}
       </section>
