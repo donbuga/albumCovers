@@ -9,17 +9,44 @@ const DISCOGS_USER_AGENT = 'AlbumCoversExplorer/1.0.0';
 const RELEASES_ENDPOINT_INTERVAL_MS = 3000;
 const DISCOVER_RESULTS_LIMIT = 36;
 
-const DISCOGS_GENRE_PARAMS: Partial<Record<GenreOption, 'genre' | 'style'>> = {
-  ROCK: 'genre',
-  POP: 'genre',
-  FOLK: 'genre',
-  JAZZ: 'genre',
-  'HIP HOP': 'genre',
-  METAL: 'style',
-  ELECTRONIC: 'genre',
-  CLASSICAL: 'genre',
-  REGGAE: 'genre',
-  BLUES: 'genre',
+const DISCOGS_COUNTRY_NAMES: Partial<Record<string, string>> = {
+  GB: 'UK',
+  US: 'US',
+};
+
+const DISCOGS_STYLE_NAMES: Record<GenreOption, string> = {
+  ROCK: 'Rock',
+  POP: 'Pop',
+  FOLK: 'Folk',
+  JAZZ: 'Jazz',
+  'HIP HOP': 'Hip Hop',
+  METAL: 'Metal',
+  ELECTRONIC: 'Electronic',
+  CLASSICAL: 'Classical',
+  REGGAE: 'Reggae',
+  BLUES: 'Blues',
+};
+
+const DISCOVERY_SLIDE_STYLES: Record<string, string> = {
+  'Jamaica|1970|REGGAE': 'Reggae',
+  'UK|1980|ROCK': 'Post Punk',
+  'Brazil|1960|JAZZ': 'Bossa Nova',
+  'US|1950|BLUES': 'Blues',
+  'US|1960|POP': 'Soul',
+  'Germany|1970|ELECTRONIC': 'Krautrock',
+  'Germany|1970|': 'Krautrock',
+  'US|1970|JAZZ': 'Jazz-Funk',
+  'Spain|1960|FOLK': 'Flamenco',
+  'Nigeria|1970|FOLK': 'Afrobeat',
+};
+
+const DECADE_SEARCH_YEARS: Record<number, number> = {
+  1950: 1955,
+  1960: 1963,
+  1970: 1973,
+  1980: 1983,
+  1990: 1993,
+  2000: 2003,
 };
 
 let releasesRequestQueue = Promise.resolve();
@@ -249,38 +276,52 @@ export const getDecadeYearRange = (decade: DiscoverAlbumFilters['decade']): Year
   return {
     startYear,
     endYear,
-    queryValue: `${startYear}-${endYear}`,
+    queryValue: String(DECADE_SEARCH_YEARS[startYear] ?? startYear + 3),
   };
 };
 
-const isAlbumWithinYearRange = (album: AlbumResult, yearRange: YearRange | null): boolean => {
-  if (!yearRange || !album.year) {
-    return true;
-  }
-
-  const albumYear = Number.parseInt(album.year, 10);
-
-  return albumYear >= yearRange.startYear && albumYear <= yearRange.endYear;
+type DiscoverSearchAttempt = {
+  country?: string;
+  style?: string;
+  year?: string;
 };
 
-const buildDiscoverSearchUrl = (filters: DiscoverAlbumFilters, genre?: GenreOption): string => {
+const getDiscogsCountryName = (country: DiscoverAlbumFilters['country']): string | undefined => {
+  if (!country) {
+    return undefined;
+  }
+
+  return DISCOGS_COUNTRY_NAMES[country.code] ?? country.name;
+};
+
+const getDiscogsStyleName = (filters: DiscoverAlbumFilters, genre?: GenreOption): string | undefined => {
+  const country = getDiscogsCountryName(filters.country) ?? '';
+  const decade = filters.decade ? filters.decade.slice(0, 4) : '';
+  const slideStyle = DISCOVERY_SLIDE_STYLES[`${country}|${decade}|${genre ?? ''}`];
+
+  if (slideStyle) {
+    return slideStyle;
+  }
+
+  return genre ? DISCOGS_STYLE_NAMES[genre] : undefined;
+};
+
+const buildDiscoverSearchUrl = (attempt: DiscoverSearchAttempt): string => {
   const url = new URL(`${DISCOGS_BASE_URL}/database/search`);
-  const yearRange = getDecadeYearRange(filters.decade);
 
   url.searchParams.set('type', 'release');
-  url.searchParams.set('per_page', '50');
+  url.searchParams.set('per_page', '25');
 
-  if (filters.country) {
-    url.searchParams.set('country', filters.country.name);
+  if (attempt.country) {
+    url.searchParams.set('country', attempt.country);
   }
 
-  if (yearRange) {
-    url.searchParams.set('year', yearRange.queryValue);
+  if (attempt.style) {
+    url.searchParams.set('style', attempt.style);
   }
 
-  if (genre) {
-    const paramName = DISCOGS_GENRE_PARAMS[genre] ?? 'genre';
-    url.searchParams.set(paramName, genre);
+  if (attempt.year) {
+    url.searchParams.set('year', attempt.year);
   }
 
   return url.toString();
@@ -303,6 +344,51 @@ const fetchDiscogsSearch = async (url: string, signal?: AbortSignal): Promise<Di
   return (await response.json()) as DiscogsSearchResponse;
 };
 
+const buildDiscoverSearchAttempts = (filters: DiscoverAlbumFilters, genre?: GenreOption): DiscoverSearchAttempt[] => {
+  const country = getDiscogsCountryName(filters.country);
+  const yearRange = getDecadeYearRange(filters.decade);
+  const style = getDiscogsStyleName(filters, genre);
+  const attempts: DiscoverSearchAttempt[] = [];
+
+  attempts.push({ country, style, year: yearRange?.queryValue });
+
+  if (country || style) {
+    attempts.push({ country, style });
+  }
+
+  if (style) {
+    attempts.push({ style });
+  }
+
+  return attempts.filter(
+    (attempt, index, allAttempts) =>
+      Boolean(attempt.country || attempt.style || attempt.year) &&
+      allAttempts.findIndex(
+        (currentAttempt) =>
+          currentAttempt.country === attempt.country && currentAttempt.style === attempt.style && currentAttempt.year === attempt.year,
+      ) === index,
+  );
+};
+
+const fetchDiscoverSearchWithFallback = async (
+  filters: DiscoverAlbumFilters,
+  genre?: GenreOption,
+  signal?: AbortSignal,
+): Promise<DiscogsRelease[]> => {
+  const attempts = buildDiscoverSearchAttempts(filters, genre);
+
+  for (const attempt of attempts) {
+    const response = await fetchDiscogsSearch(buildDiscoverSearchUrl(attempt), signal);
+    const releases = response.results ?? [];
+
+    if (releases.length > 0) {
+      return releases;
+    }
+  }
+
+  return [];
+};
+
 export const searchDiscoverAlbums = async (
   filters: DiscoverAlbumFilters,
   signal?: AbortSignal,
@@ -313,16 +399,15 @@ export const searchDiscoverAlbums = async (
     return [];
   }
 
-  const yearRange = getDecadeYearRange(filters.decade);
   const genresToSearch = filters.genres.length > 0 ? filters.genres : [undefined];
-  const urls = genresToSearch.map((genre) => buildDiscoverSearchUrl(filters, genre));
-  const responses = await Promise.all(urls.map((url) => fetchDiscogsSearch(url, signal)));
+  const releaseGroups = await Promise.all(
+    genresToSearch.map((genre) => fetchDiscoverSearchWithFallback(filters, genre, signal)),
+  );
   const albumsById = new Map<string, AlbumResult>();
 
-  responses
-    .flatMap((response) => response.results ?? [])
+  releaseGroups
+    .flatMap((releases) => releases)
     .map(normalizeDiscogsSearchRelease)
-    .filter((album) => isAlbumWithinYearRange(album, yearRange))
     .forEach((album) => {
       albumsById.set(album.id, album);
     });
