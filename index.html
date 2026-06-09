@@ -129,19 +129,25 @@
 
           const getText = (element) => normalize(`${element.value || ''} ${element.textContent || ''} ${element.getAttribute('aria-label') || ''}`);
 
+          const sliderValueAliases = {
+            uk: 'united kingdom gb',
+            us: 'united states usa',
+          };
+
           const findClosestOption = (options, value) => {
             const normalizedValue = normalize(value);
+            const aliasedValue = sliderValueAliases[normalizedValue] || normalizedValue;
 
-            if (!normalizedValue) {
+            if (!aliasedValue) {
               return null;
             }
 
-            const valueWords = normalizedValue.split(' ').filter(Boolean);
+            const valueWords = aliasedValue.split(' ').filter(Boolean);
 
             return (
               options.find((option) => {
                 const optionText = getText(option);
-                return optionText.includes(normalizedValue) || normalizedValue.includes(optionText);
+                return optionText.includes(aliasedValue) || aliasedValue.includes(optionText);
               }) ||
               options.find((option) => {
                 const optionText = getText(option);
@@ -173,6 +179,8 @@
             afrobeat: 'folk',
             'bossa nova': 'jazz',
             flamenco: 'folk',
+            'jazz funk': 'jazz',
+            krautrock: 'electronic',
             'post punk': 'rock',
             soul: 'pop',
           };
