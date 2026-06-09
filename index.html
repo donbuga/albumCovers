@@ -1,0 +1,297 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/albumCovers/favicon.svg" />
+    <title>SoundMap — Descubre música por su origen</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      #discovery-slider {
+        position: relative;
+        min-height: 90px;
+        max-height: 90px;
+        overflow: hidden;
+        border: 1px solid #1a233c;
+        border-radius: 1.5rem;
+        background: linear-gradient(135deg, #0f1d3b, #081026, #050812);
+        box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.3);
+        padding: 14px 18px 18px;
+      }
+
+      #discovery-slider .slide {
+        position: absolute;
+        inset: 14px 18px 24px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        gap: 4px;
+        opacity: 0;
+        pointer-events: none;
+        cursor: pointer;
+        transition: opacity 0.5s ease, filter 0.2s ease;
+      }
+
+      #discovery-slider .slide.active {
+        opacity: 1;
+        pointer-events: auto;
+      }
+
+      #discovery-slider .slide.active:hover {
+        filter: brightness(1.18);
+      }
+
+      #discovery-slider .slide-kicker {
+        margin: 0;
+        color: #bef264;
+        font-size: 0.7rem;
+        font-weight: 600;
+        letter-spacing: 0.05em;
+        line-height: 1.1;
+        text-transform: uppercase;
+      }
+
+      #discovery-slider .slide-title {
+        margin: 0;
+        color: #ffffff;
+        font-size: 0.95rem;
+        font-weight: 700;
+        line-height: 1.2;
+      }
+
+      #discovery-slider .slider-dots {
+        position: absolute;
+        bottom: 10px;
+        left: 0;
+        right: 0;
+        display: flex;
+        justify-content: center;
+        gap: 5px;
+      }
+
+      #discovery-slider .dot {
+        width: 5px;
+        height: 5px;
+        border-radius: 999px;
+        background: #bef264;
+        cursor: pointer;
+        opacity: 0.3;
+      }
+
+      #discovery-slider .dot.active {
+        opacity: 1;
+      }
+    </style>
+  <script>tailwind.config = { theme: { extend: {} } };</script>
+  <script type="module" crossorigin src="/albumCovers/assets/index-B3WoCfwq.js"></script>
+  <link rel="stylesheet" crossorigin href="/albumCovers/assets/index-DuH_uigs.css">
+</head>
+  <body>
+    <div id="root"></div>
+    <script>
+      document.addEventListener('DOMContentLoaded', () => {
+        const setupDiscoverySlider = () => {
+          const slider = document.getElementById('discovery-slider');
+
+          if (!slider || slider.dataset.sliderReady === 'true') {
+            return Boolean(slider);
+          }
+
+          const slides = Array.from(slider.querySelectorAll('.slide'));
+          const dots = Array.from(slider.querySelectorAll('.dot'));
+          let currentSlide = Math.max(
+            0,
+            slides.findIndex((slide) => slide.classList.contains('active')),
+          );
+          let sliderInterval;
+
+          const showSlide = (nextSlide) => {
+            slides[currentSlide].classList.remove('active');
+            dots[currentSlide].classList.remove('active');
+            currentSlide = nextSlide;
+            slides[currentSlide].classList.add('active');
+            dots[currentSlide].classList.add('active');
+          };
+
+          const startSlider = () => {
+            window.clearInterval(sliderInterval);
+            sliderInterval = window.setInterval(() => {
+              showSlide((currentSlide + 1) % slides.length);
+            }, 6000);
+          };
+
+          const normalize = (value) =>
+            String(value || '')
+              .toLowerCase()
+              .normalize('NFD')
+              .replace(/[\u0300-\u036f]/g, '')
+              .replace(/[^a-z0-9]+/g, ' ')
+              .trim();
+
+          const getText = (element) => normalize(`${element.value || ''} ${element.textContent || ''} ${element.getAttribute('aria-label') || ''}`);
+
+          const sliderValueAliases = {
+            uk: 'united kingdom gb',
+            us: 'united states usa',
+          };
+
+          const findClosestOption = (options, value) => {
+            const normalizedValue = normalize(value);
+            const aliasedValue = sliderValueAliases[normalizedValue] || normalizedValue;
+
+            if (!aliasedValue) {
+              return null;
+            }
+
+            const valueWords = aliasedValue.split(' ').filter(Boolean);
+
+            return (
+              options.find((option) => {
+                const optionText = getText(option);
+                return optionText.includes(aliasedValue) || aliasedValue.includes(optionText);
+              }) ||
+              options.find((option) => {
+                const optionText = getText(option);
+                return valueWords.some((word) => optionText.includes(word));
+              }) ||
+              null
+            );
+          };
+
+          const triggerClick = (element) => {
+            if (typeof element.click === 'function') {
+              element.click();
+              return;
+            }
+
+            element.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+          };
+
+          const clickIfNeeded = (element, isActive) => {
+            if (element && !isActive(element)) {
+              triggerClick(element);
+            }
+          };
+
+          const findButtonByText = (text) =>
+            Array.from(document.querySelectorAll('button')).find((button) => normalize(button.textContent).includes(normalize(text)));
+
+          const closestGenreByName = {
+            afrobeat: 'folk',
+            'bossa nova': 'jazz',
+            flamenco: 'folk',
+            'jazz funk': 'jazz',
+            krautrock: 'electronic',
+            'post punk': 'rock',
+            soul: 'pop',
+          };
+
+          const scrollToDiscoverMap = () => {
+            const map = document.querySelector('svg[aria-label="Mapa del mundo para seleccionar un país"]');
+            (map?.closest('section') || slider).scrollIntoView({ behavior: 'smooth', block: 'start' });
+          };
+
+          const scrollToResults = () => {
+            const resultsTitle = Array.from(document.querySelectorAll('h2')).find((heading) => normalize(heading.textContent).includes('albumes encontrados'));
+            (resultsTitle?.closest('section') || slider).scrollIntoView({ behavior: 'smooth', block: 'start' });
+          };
+
+          const expandFilters = (callback) => {
+            const expandButton = findButtonByText('Expandir filtros');
+
+            if (expandButton) {
+              triggerClick(expandButton);
+              window.setTimeout(callback, 80);
+              return;
+            }
+
+            callback();
+          };
+
+          const clearFilters = (callback) => {
+            const clearButton = findButtonByText('Limpiar filtros');
+
+            if (clearButton && !clearButton.disabled) {
+              triggerClick(clearButton);
+              window.setTimeout(callback, 80);
+              return;
+            }
+
+            callback();
+          };
+
+          const applySlideFilters = (slide) => {
+            const { country, decade, genre } = slide.dataset;
+
+            if (!country && !decade && !genre) {
+              scrollToDiscoverMap();
+              return;
+            }
+
+            expandFilters(() => {
+              clearFilters(() => {
+                const countryOptions = Array.from(document.querySelectorAll('g[role="button"][aria-label^="Seleccionar "]'));
+                const countryOption = findClosestOption(countryOptions, country);
+                clickIfNeeded(countryOption, (element) => element.getAttribute('aria-pressed') === 'true');
+
+                const decadeButtons = Array.from(document.querySelectorAll('[role="radiogroup"] button[role="radio"]'));
+                const decadeButton = findClosestOption(decadeButtons, decade);
+                clickIfNeeded(decadeButton, (element) => element.getAttribute('aria-checked') === 'true');
+
+                const genreButtons = Array.from(document.querySelectorAll('button[aria-pressed]')).filter(
+                  (button) => !button.matches('g[role="button"]'),
+                );
+                genreButtons.forEach((button) => {
+                  if (button.getAttribute('aria-pressed') === 'true') {
+                    button.click();
+                  }
+                });
+                const genreButton = findClosestOption(genreButtons, genre) || findClosestOption(genreButtons, closestGenreByName[normalize(genre)]);
+                clickIfNeeded(genreButton, (element) => element.getAttribute('aria-pressed') === 'true');
+
+                window.setTimeout(() => {
+                  const discoverButton = findButtonByText('Descubrir álbumes');
+
+                  if (discoverButton && !discoverButton.disabled) {
+                    triggerClick(discoverButton);
+                  }
+
+                  scrollToResults();
+                }, 80);
+              });
+            });
+          };
+
+          dots.forEach((dot, dotIndex) => {
+            dot.addEventListener('click', () => {
+              showSlide(dotIndex);
+              startSlider();
+            });
+          });
+
+          slides.forEach((slide) => {
+            slide.addEventListener('click', () => {
+              applySlideFilters(slide);
+            });
+          });
+
+          slider.dataset.sliderReady = 'true';
+          startSlider();
+          return true;
+        };
+
+        if (setupDiscoverySlider()) {
+          return;
+        }
+
+        const sliderObserver = new MutationObserver(() => {
+          if (setupDiscoverySlider()) {
+            sliderObserver.disconnect();
+          }
+        });
+
+        sliderObserver.observe(document.body, { childList: true, subtree: true });
+      });
+    </script>
+  </body>
+</html>
